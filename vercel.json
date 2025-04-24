@@ -4,7 +4,7 @@
   "outputDirectory": "frontend/.next",
   "installCommand": "cd frontend && npm install",
   "framework": "nextjs",
-  "regions": ["all"],
+  "regions": ["iad1"],
   "headers": [
     {
       "source": "/(.*)",

@@ -18,10 +18,18 @@ const nextConfig = {
   },
   // Enable React StrictMode for better development experience
   reactStrictMode: true,
+  // Vercel deployment optimizations
+  swcMinify: true,
   // Configure server settings for Vercel
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000", "*.vercel.app", "*.now.sh"],
+      allowedOrigins: [
+        "localhost:3000",
+        "*.vercel.app",
+        "*.now.sh",
+        "varad-properties.vercel.app/",
+        "varad-properties*.vercel.app"
+      ],
     },
   },
 };

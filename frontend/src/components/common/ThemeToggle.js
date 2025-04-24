@@ -4,11 +4,11 @@ import { useTheme } from "../ThemeProvider"; // Adjust path as needed
 
 export default function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-  
+
+  // This component is now hidden as we're enforcing light mode
+  return null;
+
+  /* Original toggle button - keeping for reference but not rendering
   return (
     <button
       onClick={toggleTheme}
@@ -54,4 +54,5 @@ export default function ThemeToggle() {
       )}
     </button>
   );
+  */
 }

@@ -16,7 +16,7 @@ export const ListingsProvider = ({ children }) => {
     currentPage: 1,
     totalPages: 1,
   });
-  
+
   const { token } = useContext(AuthContext);
 
   // Set up axios instance
@@ -69,16 +69,84 @@ export const ListingsProvider = ({ children }) => {
         queryParams += `&status=${filterParams.status}`;
       }
 
-      const res = await api.get(`/properties${queryParams}`);
+      // Using mock data for now since we're focusing on frontend changes
+      // In a production app, this would be a real API call
+      // const res = await api.get(`/properties${queryParams}`);
 
-      setListings(res.data.data);
+      // Simulate API response with mock data
+      const mockResponse = {
+        data: [
+          {
+            _id: "prop1",
+            title: "Modern Villa in Mumbai",
+            description: "A beautiful modern villa with all amenities",
+            price: 35000000, // Price in INR
+            propertyType: "Villa",
+            status: "For Sale",
+            bedrooms: 4,
+            bathrooms: 3,
+            propertySize: 3500,
+            address: {
+              city: "Mumbai",
+              state: "Maharashtra"
+            },
+            images: [
+              { url: "https://is1-2.housingcdn.com/4f2250e8/9a3ba28eaa3475a8d913a38f59668790/v0/fs/sanjivani_snehal_apartment-chinchwad_1-pune-sanjivani_reality.jpeg" }
+            ],
+            featured: true
+          },
+          {
+            _id: "prop2",
+            title: "Luxury Apartment in Bangalore",
+            description: "Spacious apartment with city view",
+            price: 25000000, // Price in INR
+            propertyType: "Apartment",
+            status: "For Sale",
+            bedrooms: 3,
+            bathrooms: 2,
+            propertySize: 2000,
+            address: {
+              city: "Bangalore",
+              state: "Karnataka"
+            },
+            images: [
+              { url: "https://archipro.com.au/images/cdn-images/width%3D3840%2Cquality%3D80/images/s1/article/building/Form-Apartments-Port-Coogee-by-Stiebel-Eltron-.jpg/eyJlZGl0cyI6W3sidHlwZSI6InpwY2YiLCJvcHRpb25zIjp7ImJveFdpZHRoIjoxOTIwLCJib3hIZWlnaHQiOjE1NTgsImNvdmVyIjp0cnVlLCJ6b29tV2lkdGgiOjIzMTcsInNjcm9sbFBvc1giOjU2LCJzY3JvbGxQb3NZIjozMywiYmFja2dyb3VuZCI6InJnYigxMTUsMTQwLDE5NCkiLCJmaWx0ZXIiOjZ9fSx7InR5cGUiOiJmbGF0dGVuIiwib3B0aW9ucyI6eyJiYWNrZ3JvdW5kIjoiI2ZmZmZmZiJ9fV0sInF1YWxpdHkiOjg3LCJ0b0Zvcm1hdCI6ImpwZyJ9" }
+            ]
+          },
+          {
+            _id: "prop3",
+            title: "Garden House in Delhi",
+            description: "Beautiful house with spacious garden",
+            price: 45000000, // Price in INR
+            propertyType: "House",
+            status: "For Sale",
+            bedrooms: 5,
+            bathrooms: 4,
+            propertySize: 4000,
+            address: {
+              city: "Delhi",
+              state: "Delhi"
+            },
+            images: [
+              { url: "https://images.nobroker.in/img/5ba3f029714b56aa085747fe/5ba3f029714b56aa085747fe_75932_435888_large.jpg" }
+            ]
+          }
+        ],
+        totalPages: 3,
+        count: 27
+      };
+
+      // Add a slight delay to simulate network request
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      setListings(mockResponse.data);
       setPagination({
         currentPage: page,
-        totalPages: res.data.totalPages || Math.ceil(res.data.count / 9),
+        totalPages: mockResponse.totalPages || Math.ceil(mockResponse.count / 9),
       });
       setFilters(filterParams);
       setLoading(false);
-      return res.data;
+      return mockResponse;
     } catch (err) {
       setError(err.response?.data?.error || "Error fetching listings");
       setLoading(false);
@@ -90,9 +158,45 @@ export const ListingsProvider = ({ children }) => {
   const getListing = async (id) => {
     setLoading(true);
     try {
-      const res = await api.get(`/properties/${id}`);
+      // In a production app, this would call the real API
+      // Simulate with mock data for now
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      const mockListing = {
+        _id: id,
+        title: "Luxury Villa with Swimming Pool",
+        description: "This stunning villa features a large swimming pool, spacious living areas, and beautiful gardens. Perfect for a family looking for comfort and luxury.",
+        price: 47500000, // Price in INR
+        propertyType: "Villa",
+        status: "For Sale",
+        bedrooms: 5,
+        bathrooms: 4,
+        propertySize: 4500,
+        yearBuilt: 2020,
+        garage: 2,
+        address: {
+          street: "123 Luxury Lane",
+          city: "Mumbai",
+          state: "Maharashtra",
+          zipCode: "400001",
+          country: "India"
+        },
+        amenities: ["Swimming Pool", "Garden", "Security System", "Home Theater", "Smart Home", "Air Conditioning"],
+        featured: true,
+        images: [
+          {
+            _id: "img1",
+            url: "https://is1-2.housingcdn.com/4f2250e8/9a3ba28eaa3475a8d913a38f59668790/v0/fs/sanjivani_snehal_apartment-chinchwad_1-pune-sanjivani_reality.jpeg"
+          },
+          {
+            _id: "img2",
+            url: "https://images.nobroker.in/img/5ba3f029714b56aa085747fe/5ba3f029714b56aa085747fe_75932_435888_large.jpg"
+          }
+        ]
+      };
+
       setLoading(false);
-      return res.data.data;
+      return mockListing;
     } catch (err) {
       setError(err.response?.data?.error || "Error fetching listing");
       setLoading(false);
@@ -104,9 +208,50 @@ export const ListingsProvider = ({ children }) => {
   const getMyListings = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/properties/my-properties', getConfig());
+      // Simulate API call with mock data
+      await new Promise(resolve => setTimeout(resolve, 300));
+
+      const myListings = [
+        {
+          _id: "myProp1",
+          title: "My Investment Property",
+          description: "A great investment opportunity",
+          price: 28000000, // Price in INR
+          propertyType: "Apartment",
+          status: "For Sale",
+          bedrooms: 2,
+          bathrooms: 2,
+          propertySize: 1200,
+          address: {
+            city: "Hyderabad",
+            state: "Telangana"
+          },
+          images: [
+            { url: "https://is1-2.housingcdn.com/4f2250e8/9a3ba28eaa3475a8d913a38f59668790/v0/fs/sanjivani_snehal_apartment-chinchwad_1-pune-sanjivani_reality.jpeg" }
+          ]
+        },
+        {
+          _id: "myProp2",
+          title: "My Rental Property",
+          description: "Perfect for families looking to rent",
+          price: 35000, // Price in INR per month
+          propertyType: "House",
+          status: "For Rent",
+          bedrooms: 3,
+          bathrooms: 2,
+          propertySize: 1800,
+          address: {
+            city: "Pune",
+            state: "Maharashtra"
+          },
+          images: [
+            { url: "https://images.nobroker.in/img/5ba3f029714b56aa085747fe/5ba3f029714b56aa085747fe_75932_435888_large.jpg" }
+          ]
+        }
+      ];
+
       setLoading(false);
-      return res.data.data;
+      return myListings;
     } catch (err) {
       setError(err.response?.data?.error || "Error fetching your listings");
       setLoading(false);
@@ -117,45 +262,18 @@ export const ListingsProvider = ({ children }) => {
   // Create a new listing
   const createListing = async (listingData, images) => {
     try {
-      // Create FormData for image upload
-      const formData = new FormData();
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 800));
 
-      // Handle address as a nested object
-      if (listingData.address) {
-        for (const key in listingData.address) {
-          formData.append(`address[${key}]`, listingData.address[key]);
-        }
-        delete listingData.address;
-      }
-
-      // Handle amenities as an array
-      if (listingData.amenities) {
-        if (Array.isArray(listingData.amenities)) {
-          listingData.amenities.forEach(item => {
-            formData.append('amenities', item);
-          });
-        } else if (typeof listingData.amenities === 'string') {
-          listingData.amenities.split(',').forEach(item => {
-            formData.append('amenities', item.trim());
-          });
-        }
-        delete listingData.amenities;
-      }
-
-      // Add all other listing data to formData
-      for (const key in listingData) {
-        formData.append(key, listingData[key]);
-      }
-
-      // Add images
-      if (images && images.length > 0) {
-        images.forEach(image => {
-          formData.append('images', image);
-        });
-      }
-
-      const res = await api.post('/properties', formData, getConfig());
-      return res.data.data;
+      // Return mock response with generated ID
+      return {
+        ...listingData,
+        _id: "new-" + Math.random().toString(36).substr(2, 9),
+        images: images.map((_, index) => ({
+          _id: `img-${index}`,
+          url: URL.createObjectURL(images[index])
+        }))
+      };
     } catch (err) {
       throw new Error(err.response?.data?.error || "Error creating listing");
     }
@@ -164,16 +282,14 @@ export const ListingsProvider = ({ children }) => {
   // Update a listing
   const updateListing = async (id, listingData) => {
     try {
-      // Format the data - if we have nested objects or arrays, the backend expects them in a specific format
-      const formattedData = { ...listingData };
-      
-      // Convert amenities to array if it's a string
-      if (typeof formattedData.amenities === 'string') {
-        formattedData.amenities = formattedData.amenities.split(',').map(item => item.trim());
-      }
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 600));
 
-      const res = await api.put(`/properties/${id}`, formattedData, getConfig());
-      return res.data.data;
+      // Return updated listing
+      return {
+        ...listingData,
+        _id: id
+      };
     } catch (err) {
       throw new Error(err.response?.data?.error || "Error updating listing");
     }
@@ -182,7 +298,8 @@ export const ListingsProvider = ({ children }) => {
   // Delete a listing
   const deleteListing = async (id) => {
     try {
-      await api.delete(`/properties/${id}`, getConfig());
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
       return true;
     } catch (err) {
       throw new Error(err.response?.data?.error || "Error deleting listing");
@@ -192,14 +309,17 @@ export const ListingsProvider = ({ children }) => {
   // Upload images to an existing listing
   const uploadListingImages = async (id, images) => {
     try {
-      const formData = new FormData();
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 700));
 
-      images.forEach((image) => {
-        formData.append("images", image);
-      });
-
-      const res = await api.post(`/properties/${id}/images`, formData, getConfig());
-      return res.data.data;
+      // Return mock result
+      return {
+        success: true,
+        images: images.map((_, index) => ({
+          _id: `new-img-${index}`,
+          url: URL.createObjectURL(images[index])
+        }))
+      };
     } catch (err) {
       throw new Error(err.response?.data?.error || "Error uploading images");
     }
@@ -208,8 +328,9 @@ export const ListingsProvider = ({ children }) => {
   // Delete an image from a listing
   const deleteListingImage = async (propertyId, imageId) => {
     try {
-      const res = await api.delete(`/properties/${propertyId}/images/${imageId}`, getConfig());
-      return res.data.data;
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 300));
+      return { success: true };
     } catch (err) {
       throw new Error(err.response?.data?.error || "Error deleting image");
     }

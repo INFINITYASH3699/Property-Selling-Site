@@ -14,27 +14,27 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
   const { isAuthenticated } = useContext(AuthContext);
   const [isHovered, setIsHovered] = useState(false);
   const [isInWishlistState, setIsInWishlistState] = useState(isInWishlist(property._id));
-  
-  // Format currency
+
+  // Format currency - Updated to use INR
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       maximumFractionDigits: 0
     }).format(price);
   };
-  
+
   // Handle wishlist toggle
   const handleWishlistToggle = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!isAuthenticated) {
       // Redirect to login or show login modal
       alert('Please login to add properties to your wishlist');
       return;
     }
-    
+
     try {
       if (isInWishlistState) {
         await removeFromWishlist(property._id);
@@ -47,28 +47,28 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
       console.error('Error updating wishlist:', error);
     }
   };
-  
+
   // Get the first image or a placeholder
-  const mainImage = property.images && property.images.length > 0 
-    ? property.images[0].url 
+  const mainImage = property.images && property.images.length > 0
+    ? property.images[0].url
     : '/images/placeholder-property.jpg';
-    
+
   // Format address
   const formatAddress = () => {
     if (!property.address) return 'Location not specified';
-    
+
     const parts = [];
     if (property.address.city) parts.push(property.address.city);
     if (property.address.state) parts.push(property.address.state);
-    
+
     return parts.join(', ');
   };
 
   // Grid view card
   if (viewType === 'grid') {
     return (
-      <motion.div 
-        className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden h-full"
+      <motion.div
+        className="bg-white rounded-xl shadow-md overflow-hidden h-full"
         whileHover={{ y: -5, transition: { duration: 0.2 } }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -86,7 +86,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
                 {property.status}
               </span>
             </div>
-            
+
             {/* Featured Badge */}
             {property.featured && (
               <div className="absolute top-3 right-14 z-10">
@@ -95,21 +95,21 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
                 </span>
               </div>
             )}
-            
+
             {/* Wishlist Heart */}
-            <button 
+            <button
               onClick={handleWishlistToggle}
-              className="absolute top-3 right-3 z-10 p-1.5 bg-white rounded-full text-gray-700 hover:text-pink-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-pink-500 focus:outline-none transition-all"
+              className="absolute top-3 right-3 z-10 p-1.5 bg-white rounded-full text-gray-700 hover:text-pink-500 focus:outline-none transition-all"
             >
-              <Heart 
-                size={20} 
-                className={isInWishlistState ? "fill-pink-500 text-pink-500" : ""} 
+              <Heart
+                size={20}
+                className={isInWishlistState ? "fill-pink-500 text-pink-500" : ""}
               />
             </button>
-            
+
             {/* Property Image */}
             <div className="relative h-48 w-full">
-              <Image 
+              <Image
                 src={mainImage}
                 alt={property.title}
                 fill
@@ -119,35 +119,35 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
               />
             </div>
           </div>
-          
+
           {/* Content */}
           <div className="p-4">
             {/* Price */}
-            <div className="font-bold text-xl text-blue-600 dark:text-blue-400 mb-1">
+            <div className="font-bold text-xl text-blue-500 mb-1">
               {formatPrice(property.price)}
-              {property.status === 'For Rent' && <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/month</span>}
+              {property.status === 'For Rent' && <span className="text-sm font-normal text-gray-500">/month</span>}
             </div>
-            
+
             {/* Title */}
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">{property.title}</h3>
-            
+            <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-1">{property.title}</h3>
+
             {/* Location */}
-            <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3">
+            <div className="flex items-center text-gray-600 mb-3">
               <MapPin size={16} className="mr-1" />
               <span className="text-sm">{formatAddress()}</span>
             </div>
-            
+
             {/* Features */}
-            <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 pt-3">
-              <div className="flex items-center text-gray-600 dark:text-gray-400">
+            <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+              <div className="flex items-center text-gray-600">
                 <Bed size={16} className="mr-1" />
                 <span className="text-sm mr-3">{property.bedrooms} Beds</span>
-                
+
                 <Bath size={16} className="mr-1" />
                 <span className="text-sm">{property.bathrooms} Baths</span>
               </div>
-              
-              <div className="flex items-center text-gray-600 dark:text-gray-400">
+
+              <div className="flex items-center text-gray-600">
                 <Square size={16} className="mr-1" />
                 <span className="text-sm">{property.propertySize} sqft</span>
               </div>
@@ -157,11 +157,11 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
       </motion.div>
     );
   }
-  
+
   // List view card
   return (
-    <motion.div 
-      className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden"
+    <motion.div
+      className="bg-white rounded-xl shadow-md overflow-hidden"
       whileHover={{ y: -3, transition: { duration: 0.2 } }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -181,7 +181,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
                 {property.status}
               </span>
             </div>
-            
+
             {/* Featured Badge */}
             {property.featured && (
               <div className="absolute top-3 right-14 z-10">
@@ -190,20 +190,20 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
                 </span>
               </div>
             )}
-            
+
             {/* Wishlist Heart */}
-            <button 
+            <button
               onClick={handleWishlistToggle}
-              className="absolute top-3 right-3 z-10 p-1.5 bg-white rounded-full text-gray-700 hover:text-pink-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:text-pink-500 focus:outline-none transition-all"
+              className="absolute top-3 right-3 z-10 p-1.5 bg-white rounded-full text-gray-700 hover:text-pink-500 focus:outline-none transition-all"
             >
-              <Heart 
-                size={20} 
-                className={isInWishlistState ? "fill-pink-500 text-pink-500" : ""} 
+              <Heart
+                size={20}
+                className={isInWishlistState ? "fill-pink-500 text-pink-500" : ""}
               />
             </button>
-            
+
             {/* Property Image */}
-            <Image 
+            <Image
               src={mainImage}
               alt={property.title}
               fill
@@ -212,52 +212,52 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
               style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }}
             />
           </div>
-          
+
           {/* Content section */}
           <div className="p-5 md:p-6 flex-1 flex flex-col justify-between">
             <div>
               {/* Price */}
-              <div className="font-bold text-xl text-blue-600 dark:text-blue-400 mb-1">
+              <div className="font-bold text-xl text-blue-500 mb-1">
                 {formatPrice(property.price)}
-                {property.status === 'For Rent' && <span className="text-sm font-normal text-gray-500 dark:text-gray-400">/month</span>}
+                {property.status === 'For Rent' && <span className="text-sm font-normal text-gray-500">/month</span>}
               </div>
-              
+
               {/* Title */}
-              <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2">{property.title}</h3>
-              
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">{property.title}</h3>
+
               {/* Location */}
-              <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3">
+              <div className="flex items-center text-gray-600 mb-3">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-sm">{formatAddress()}</span>
               </div>
-              
+
               {/* Description */}
-              <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+              <p className="text-gray-600 mb-4 line-clamp-2">
                 {property.description}
               </p>
             </div>
-            
+
             {/* Features and CTA */}
-            <div className="flex flex-wrap justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
-              <div className="flex space-x-4 items-center text-gray-600 dark:text-gray-400">
+            <div className="flex flex-wrap justify-between items-center border-t border-gray-200 pt-4">
+              <div className="flex space-x-4 items-center text-gray-600">
                 <div className="flex items-center">
                   <Bed size={18} className="mr-1" />
                   <span>{property.bedrooms} Beds</span>
                 </div>
-                
+
                 <div className="flex items-center">
                   <Bath size={18} className="mr-1" />
                   <span>{property.bathrooms} Baths</span>
                 </div>
-                
+
                 <div className="flex items-center">
                   <Square size={18} className="mr-1" />
                   <span>{property.propertySize} sqft</span>
                 </div>
               </div>
-              
+
               <div className="mt-4 md:mt-0">
-                <span className="inline-flex items-center text-blue-600 dark:text-blue-400 font-medium hover:text-blue-800 dark:hover:text-blue-300">
+                <span className="inline-flex items-center text-blue-500 font-medium hover:text-blue-700">
                   View Details
                   <ArrowRight size={16} className="ml-1" />
                 </span>

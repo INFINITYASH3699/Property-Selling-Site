@@ -1,4 +1,3 @@
-// app/page.js
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,41 +12,42 @@ import {
 
 export default function home() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Updated with lighter colors */}
       <section className="relative h-screen">
-        {/* Background image placeholder - replace with your actual image */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-blue-700">
-          <div className="absolute inset-0 bg-black opacity-50"></div>
+        {/* Background gradient with overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-400">
+          <div className="absolute inset-0 bg-white opacity-30"></div>
         </div>
 
+        {/* Hero content */}
         <div className="relative flex flex-col items-center justify-center h-full text-center px-4 md:px-8">
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight max-w-4xl">
+          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight max-w-4xl drop-shadow-lg">
             Find Your Perfect Home With Varad Properties
           </h1>
-          <p className="text-xl md:text-2xl text-white mb-10 max-w-2xl opacity-90">
+          <p className="text-xl md:text-2xl text-white mb-10 max-w-2xl opacity-90 drop-shadow">
             Luxury homes, exclusive properties, and personalized service to
             match your lifestyle
           </p>
 
-          {/* Search Bar */}
-          <div className="w-full max-w-3xl bg-white p-2 rounded-lg shadow-lg">
+          {/* Search Bar - Updated with improved styling */}
+          <div className="w-full max-w-3xl bg-white p-3 rounded-lg shadow-lg">
             <div className="flex flex-col md:flex-row">
-              <div className="flex-grow flex items-center px-4 py-2">
-                <Search className="h-5 w-5 text-gray-400 mr-2" />
+              <div className="flex-grow flex items-center px-4 py-3">
+                <Search className="h-5 w-5 text-blue-500 mr-2" />
                 <input
                   type="text"
                   placeholder="Search by location, property type, or features..."
-                  className="w-full outline-none text-gray-700"
+                  className="w-full outline-none text-gray-700 text-lg"
                 />
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-md mt-2 md:mt-0 transition duration-300">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-md mt-2 md:mt-0 transition duration-300">
                 Search
               </button>
             </div>
           </div>
 
-          {/* Property Stats */}
+          {/* Property Stats - Updated with light styling */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 mt-12 text-white">
             {[
               { label: "Properties", value: "1,500+" },
@@ -55,11 +55,11 @@ export default function home() {
               { label: "Cities", value: "15+" },
               { label: "Satisfaction", value: "98%" },
             ].map((stat, index) => (
-              <div key={index} className="text-center">
+              <div key={index} className="text-center bg-blue-600/30 backdrop-blur-sm p-4 rounded-lg">
                 <div className="text-3xl md:text-4xl font-bold">
                   {stat.value}
                 </div>
-                <div className="text-sm md:text-base opacity-80">
+                <div className="text-sm md:text-base opacity-90">
                   {stat.label}
                 </div>
               </div>
@@ -84,8 +84,8 @@ export default function home() {
             {[
               {
                 title: "Luxury Villa with Pool",
-                location: "Beverly Hills, CA",
-                price: "$5,250,000",
+                location: "Juhu, Mumbai",
+                price: "₹3,95,00,000",
                 beds: 5,
                 baths: 6,
                 sqft: "6,500",
@@ -93,8 +93,8 @@ export default function home() {
               },
               {
                 title: "Modern Downtown Penthouse",
-                location: "Manhattan, NY",
-                price: "$3,800,000",
+                location: "MG Road, Bangalore",
+                price: "₹2,85,00,000",
                 beds: 3,
                 baths: 3.5,
                 sqft: "3,200",
@@ -102,8 +102,8 @@ export default function home() {
               },
               {
                 title: "Oceanfront Beach House",
-                location: "Malibu, CA",
-                price: "$8,750,000",
+                location: "Goa",
+                price: "₹6,50,00,000",
                 beds: 4,
                 baths: 5,
                 sqft: "4,800",
@@ -116,7 +116,7 @@ export default function home() {
               >
                 {/* Property Image Placeholder */}
                 <div className="relative h-64 bg-blue-100">
-                  <div className="absolute top-0 right-0 bg-blue-600 text-white text-sm font-bold px-3 py-1 m-4 rounded-md">
+                  <div className="absolute top-0 right-0 bg-blue-500 text-white text-sm font-bold px-3 py-1 m-4 rounded-md">
                     {property.type}
                   </div>
                 </div>
@@ -129,7 +129,7 @@ export default function home() {
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
                     {property.title}
                   </h3>
-                  <p className="text-2xl font-bold text-blue-600 mb-4">
+                  <p className="text-2xl font-bold text-blue-500 mb-4">
                     {property.price}
                   </p>
 
@@ -152,7 +152,7 @@ export default function home() {
                 <div className="px-6 pb-6">
                   <Link
                     href="/listings"
-                    className="block text-center bg-white border border-blue-600 text-blue-600 font-medium px-4 py-2 rounded-md hover:bg-blue-50 transition duration-300"
+                    className="block text-center bg-white border border-blue-500 text-blue-500 font-medium px-4 py-2 rounded-md hover:bg-blue-50 transition duration-300"
                   >
                     View Details
                   </Link>
@@ -164,7 +164,7 @@ export default function home() {
           <div className="text-center mt-12">
             <Link
               href="/listings"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-md transition duration-300"
+              className="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium px-8 py-3 rounded-md transition duration-300"
             >
               View All Properties
             </Link>
@@ -187,17 +187,17 @@ export default function home() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: <Home className="h-10 w-10 text-blue-600" />,
+                icon: <Home className="h-10 w-10 text-blue-500" />,
                 title: "Residential Properties",
                 desc: "Find your dream home with our extensive portfolio of residential properties ranging from apartments to luxury homes.",
               },
               {
-                icon: <Building className="h-10 w-10 text-blue-600" />,
+                icon: <Building className="h-10 w-10 text-blue-500" />,
                 title: "Commercial Real Estate",
                 desc: "Premium office spaces, retail outlets, and industrial properties for businesses looking to establish or expand.",
               },
               {
-                icon: <Key className="h-10 w-10 text-blue-600" />,
+                icon: <Key className="h-10 w-10 text-blue-500" />,
                 title: "Property Management",
                 desc: "Professional property management services to maintain and enhance the value of your real estate investments.",
               },
@@ -218,7 +218,7 @@ export default function home() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-16 px-4 bg-blue-600 text-white">
+      <section className="py-16 px-4 bg-blue-500 text-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -248,7 +248,7 @@ export default function home() {
                 desc: "98% client satisfaction rate with personalized service tailored to your needs.",
               },
             ].map((feature, index) => (
-              <div key={index} className="p-6 bg-blue-700 rounded-lg">
+              <div key={index} className="p-6 bg-blue-600 rounded-lg">
                 <div className="mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
                 <p className="opacity-90">{feature.desc}</p>
@@ -295,7 +295,7 @@ export default function home() {
                 <div className="flex items-center mb-4">
                   {/* Profile Image Placeholder */}
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mr-4">
-                    <span className="text-blue-600 font-bold">
+                    <span className="text-blue-500 font-bold">
                       {testimonial.name[0]}
                     </span>
                   </div>
@@ -328,13 +328,13 @@ export default function home() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               href="/listings"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-md transition duration-300"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-8 py-3 rounded-md transition duration-300"
             >
               Browse Properties
             </Link>
             <Link
               href="/contact"
-              className="bg-white border border-blue-600 text-blue-600 hover:bg-blue-50 font-medium px-8 py-3 rounded-md transition duration-300"
+              className="bg-white border border-blue-500 text-blue-500 hover:bg-blue-50 font-medium px-8 py-3 rounded-md transition duration-300"
             >
               Contact Us
             </Link>
@@ -356,9 +356,9 @@ export default function home() {
             <input
               type="email"
               placeholder="Your email address"
-              className="flex-grow px-4 py-3 rounded-l-md border-gray-300 border focus:outline-none focus:ring-2 focus:ring-blue-600 sm:rounded-r-none"
+              className="flex-grow px-4 py-3 rounded-l-md border-gray-300 border focus:outline-none focus:ring-2 focus:ring-blue-500 sm:rounded-r-none"
             />
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-md sm:rounded-l-none mt-2 sm:mt-0 transition duration-300">
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-3 rounded-md sm:rounded-l-none mt-2 sm:mt-0 transition duration-300">
               Subscribe
             </button>
           </div>

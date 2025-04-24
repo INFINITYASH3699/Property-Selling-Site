@@ -11,36 +11,28 @@ const ThemeContext = createContext({
 // Theme provider component
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("light");
-  
+
   const updateTheme = (newTheme) => {
+    // Always force light theme for this version
+    const forcedTheme = "light";
+
     // Update state
-    setTheme(newTheme);
-    
+    setTheme(forcedTheme);
+
     // Update localStorage
-    localStorage.setItem("theme", newTheme);
-    
-    // Update document class
-    if (newTheme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    localStorage.setItem("theme", forcedTheme);
+
+    // Update document class - remove dark class to ensure light theme
+    document.documentElement.classList.remove("dark");
   };
 
   // Initialize theme on mount
   useEffect(() => {
     // Clear any conflicting classes first
     document.documentElement.classList.remove("dark");
-    
-    // Get saved theme from localStorage
-    const savedTheme = localStorage.getItem("theme");
-    
-    if (savedTheme) {
-      updateTheme(savedTheme);
-    } else {
-      // Default to light theme and save it
-      updateTheme("light");
-    }
+
+    // Force light theme
+    updateTheme("light");
   }, []);
 
   return (

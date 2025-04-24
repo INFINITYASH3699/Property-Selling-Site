@@ -532,8 +532,18 @@ function FilterDropdown({ initialFilters, onFilter }) {
     onFilter(filterState);
   };
 
+  // Format currency for placeholders
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+
   return (
     <div className="p-4">
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Filter Properties</h3>
       <form onSubmit={handleFilterSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           {/* Min Price */}
@@ -542,7 +552,7 @@ function FilterDropdown({ initialFilters, onFilter }) {
               htmlFor="minPrice"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Min Price
+              Min Price (₹)
             </label>
             <input
               type="number"
@@ -554,6 +564,18 @@ function FilterDropdown({ initialFilters, onFilter }) {
               }
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <div className="mt-1 flex flex-wrap gap-2">
+              {[500000, 1000000, 2500000, 5000000].map(value => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setFilterState({ ...filterState, minPrice: value })}
+                  className="text-xs px-2 py-1 bg-gray-100 rounded border border-gray-300 hover:bg-gray-200"
+                >
+                  {formatCurrency(value)}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Max Price */}
@@ -562,7 +584,7 @@ function FilterDropdown({ initialFilters, onFilter }) {
               htmlFor="maxPrice"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Max Price
+              Max Price (₹)
             </label>
             <input
               type="number"
@@ -574,6 +596,18 @@ function FilterDropdown({ initialFilters, onFilter }) {
               }
               className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            <div className="mt-1 flex flex-wrap gap-2">
+              {[5000000, 10000000, 25000000, 50000000].map(value => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setFilterState({ ...filterState, maxPrice: value })}
+                  className="text-xs px-2 py-1 bg-gray-100 rounded border border-gray-300 hover:bg-gray-200"
+                >
+                  {formatCurrency(value)}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Bedrooms */}
@@ -628,13 +662,38 @@ function FilterDropdown({ initialFilters, onFilter }) {
           </div>
         </div>
 
-        {/* Apply Button */}
-        <button
-          type="submit"
-          className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Apply Filters
-        </button>
+        {/* Action Buttons */}
+        <div className="flex justify-between space-x-4">
+          <button
+            type="button"
+            onClick={() => {
+              setFilterState({
+                minPrice: "",
+                maxPrice: "",
+                bedrooms: "",
+                bathrooms: "",
+                propertyType: "any",
+              });
+              onFilter({
+                minPrice: "",
+                maxPrice: "",
+                bedrooms: "",
+                bathrooms: "",
+                propertyType: "any",
+              });
+            }}
+            className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+          >
+            Reset
+          </button>
+
+          <button
+            type="submit"
+            className="flex-grow px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Apply Filters
+          </button>
+        </div>
       </form>
     </div>
   );

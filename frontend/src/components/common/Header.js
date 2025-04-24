@@ -52,7 +52,7 @@ export default function Header() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/90 backdrop-blur-md shadow-md dark:bg-gray-900/90" : "bg-white dark:bg-gray-900"
+        isScrolled ? "bg-white/90 backdrop-blur-md shadow-md" : "bg-white"
       }`}
     >
       <div className="container mx-auto px-4 py-3 lg:py-4">
@@ -72,7 +72,7 @@ export default function Header() {
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
               <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
-            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+            <h1 className="text-2xl font-bold text-gray-800">
               <span className="text-blue-500">Varad</span>Properties
             </h1>
           </Link>
@@ -86,24 +86,24 @@ export default function Header() {
                 { name: "About", path: "/about" },
                 { name: "Contact", path: "/contact" },
               ].map((item) => {
-                const isActive = pathname === item.path || 
+                const isActive = pathname === item.path ||
                   (item.path !== "/" && pathname.startsWith(item.path));
 
                 return (
                   <li key={item.name}>
                     <Link
                       href={item.path}
-                      className={`text-gray-700 dark:text-gray-300 font-medium transition-colors relative group ${
+                      className={`text-gray-700 font-medium transition-colors relative group ${
                         isActive
-                          ? "text-blue-500 dark:text-blue-400 font-semibold"
-                          : "hover:text-blue-500 dark:hover:text-blue-400"
+                          ? "text-blue-500 font-semibold"
+                          : "hover:text-blue-500"
                       }`}
                     >
                       {item.name}
                       <span
                         className={`absolute -bottom-2 left-0 w-0 h-0.5 bg-blue-500 transition-all duration-300 group-hover:w-full ${
-                          isActive ? "w-full" : ""
-                        }`}
+                            isActive ? "w-full" : ""
+                          }`}
                       ></span>
                     </Link>
                   </li>
@@ -128,7 +128,7 @@ export default function Header() {
             {/* Wishlist Icon */}
             <Link
               href="/wishlist"
-              className="relative text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              className="relative text-gray-700 hover:text-blue-500 transition-colors"
             >
               <Heart className="w-6 h-6" />
               {wishlist && wishlist.length > 0 && (
@@ -141,7 +141,7 @@ export default function Header() {
             {/* Authentication Button/User Menu */}
             {authLoading ? (
               // Loading state
-              <div className="w-8 h-8 rounded-full animate-pulse bg-gray-200 dark:bg-gray-700"></div>
+              <div className="w-8 h-8 rounded-full animate-pulse bg-gray-200"></div>
             ) : isAuthenticated ? (
               // Authenticated: Show user dropdown
               <div className="relative user-dropdown">
@@ -149,7 +149,7 @@ export default function Header() {
                   onClick={() => setShowUserDropdown(!showUserDropdown)}
                   className="flex items-center space-x-2 focus:outline-none"
                 >
-                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center overflow-hidden">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden">
                     {user?.profileImage?.url ? (
                       <Image
                         src={user.profileImage.url}
@@ -163,21 +163,21 @@ export default function Header() {
                     )}
                   </div>
                   <div className="hidden md:block">
-                    <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <ChevronDown className="w-4 h-4 text-gray-500" />
                   </div>
                 </button>
 
                 {/* User Dropdown Menu */}
                 {showUserDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-1 z-50 border border-gray-200 dark:border-gray-700">
-                    <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200">
+                    <div className="px-4 py-2 border-b border-gray-200">
+                      <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
                     </div>
-                    
+
                     <Link
                       href="/dashboard"
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setShowUserDropdown(false)}
                     >
                       <div className="flex items-center">
@@ -185,10 +185,10 @@ export default function Header() {
                         Dashboard
                       </div>
                     </Link>
-                    
+
                     <Link
                       href="/dashboard?tab=profile"
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setShowUserDropdown(false)}
                     >
                       <div className="flex items-center">
@@ -196,10 +196,10 @@ export default function Header() {
                         My Profile
                       </div>
                     </Link>
-                    
+
                     <button
                       onClick={handleSignOut}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                     >
                       <div className="flex items-center">
                         <LogOut className="w-4 h-4 mr-2" />
@@ -223,7 +223,7 @@ export default function Header() {
             {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400"
+              className="md:hidden text-gray-700 hover:text-blue-500"
             >
               {isMobileMenuOpen ? (
                 <svg
@@ -262,7 +262,7 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
+          <nav className="md:hidden mt-4 pb-4 border-t border-gray-200">
             <ul className="space-y-4 mt-4">
               {[
                 { name: "Home", path: "/" },
@@ -270,17 +270,17 @@ export default function Header() {
                 { name: "About", path: "/about" },
                 { name: "Contact", path: "/contact" },
               ].map((item) => {
-                const isActive = pathname === item.path || 
+                const isActive = pathname === item.path ||
                   (item.path !== "/" && pathname.startsWith(item.path));
 
                 return (
                   <li key={item.name}>
                     <Link
                       href={item.path}
-                      className={`block text-gray-700 dark:text-gray-300 font-medium ${
+                      className={`block text-gray-700 font-medium ${
                         isActive
-                          ? "text-blue-500 dark:text-blue-400 font-semibold"
-                          : "hover:text-blue-500 dark:hover:text-blue-400"
+                          ? "text-blue-500 font-semibold"
+                          : "hover:text-blue-500"
                       }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -289,7 +289,7 @@ export default function Header() {
                   </li>
                 );
               })}
-              
+
               {/* Conditional mobile menu items */}
               {isAuthenticated ? (
                 <>
@@ -297,7 +297,7 @@ export default function Header() {
                     <li>
                       <Link
                         href="/properties/create"
-                        className="flex items-center text-gray-700 dark:text-gray-300 font-medium hover:text-blue-500 dark:hover:text-blue-400"
+                        className="flex items-center text-gray-700 font-medium hover:text-blue-500"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <Plus className="w-4 h-4 mr-2" />
@@ -308,7 +308,7 @@ export default function Header() {
                   <li>
                     <Link
                       href="/dashboard"
-                      className="flex items-center text-gray-700 dark:text-gray-300 font-medium hover:text-blue-500 dark:hover:text-blue-400"
+                      className="flex items-center text-gray-700 font-medium hover:text-blue-500"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <Home className="w-4 h-4 mr-2" />
@@ -321,7 +321,7 @@ export default function Header() {
                         handleSignOut();
                         setIsMobileMenuOpen(false);
                       }}
-                      className="flex items-center text-red-600 dark:text-red-400 font-medium"
+                      className="flex items-center text-red-600 font-medium"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out

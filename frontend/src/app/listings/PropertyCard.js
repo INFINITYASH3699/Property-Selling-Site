@@ -1,11 +1,10 @@
-// app/listings/PropertyCard.js
 'use client';
 
 import { useState, useContext } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, MapPin, Bed, Bath, ArrowRight, Square, BedDouble, Home, Tag, Clock, ExternalLink } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { MotionDiv } from '../../components/MotionWrapper';
 import { WishlistContext } from '../../context/WishlistContext';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -112,7 +111,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
   // Grid view card
   if (viewType === 'grid') {
     return (
-      <motion.div
+      <MotionDiv
         className="bg-white rounded-xl overflow-hidden h-full shadow-property transition-all duration-300"
         whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)' }}
         initial={{ opacity: 0, y: 20 }}
@@ -222,13 +221,13 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
             </div>
           </div>
         </Link>
-      </motion.div>
+      </MotionDiv>
     );
   }
 
   // List view card
   return (
-    <motion.div
+    <MotionDiv
       className="bg-white rounded-xl overflow-hidden shadow-property transition-all duration-300"
       whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)' }}
       initial={{ opacity: 0, y: 20 }}
@@ -353,6 +352,6 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </MotionDiv>
   );
 }

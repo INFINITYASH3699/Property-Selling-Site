@@ -1,3 +1,5 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,7 +12,6 @@ import {
   ThumbsUp,
   ArrowRight,
   Users,
-  Phone,
   Clock,
   Star,
   ArrowUpRight,
@@ -20,7 +21,11 @@ import {
   Square,
   Phone,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import {
+  MotionDiv,
+  MotionH1,
+  MotionP,
+} from "../components/MotionWrapper";
 
 export default function HomePage() {
   // Animation variants for staggered animations
@@ -65,15 +70,15 @@ export default function HomePage() {
         {/* Hero content */}
         <div className="container mx-auto px-4 md:px-8 relative z-10 py-20">
           <div className="max-w-4xl">
-            <motion.h1
+            <MotionH1
               className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
             >
               Find Your Dream Home With <span className="text-primary-500">Varad Properties</span>
-            </motion.h1>
-            <motion.p
+            </MotionH1>
+            <MotionP
               className="text-xl md:text-2xl text-white mb-10 max-w-3xl opacity-90"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -81,10 +86,10 @@ export default function HomePage() {
             >
               Luxury homes, exclusive properties, and personalized service to
               match your lifestyle across India
-            </motion.p>
+            </MotionP>
 
             {/* Search Bar - Updated with improved styling */}
-            <motion.div
+            <MotionDiv
               className="bg-white p-4 lg:p-5 rounded-2xl shadow-2xl mb-8 md:mb-0 max-w-3xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -112,11 +117,11 @@ export default function HomePage() {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </MotionDiv>
           </div>
 
           {/* Property Stats - Updated with modern card styling */}
-          <motion.div
+          <MotionDiv
             className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-4xl"
             variants={containerVariants}
             initial="hidden"
@@ -128,7 +133,7 @@ export default function HomePage() {
               { label: "Cities Covered", value: "15+", icon: <MapPin className="w-6 h-6" /> },
               { label: "Satisfaction", value: "98%", icon: <Star className="w-6 h-6" /> },
             ].map((stat, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 variants={itemVariants}
                 className="bg-white/10 backdrop-blur-lg p-4 rounded-xl text-center border border-white/20"
@@ -140,9 +145,9 @@ export default function HomePage() {
                 </div>
                 <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
                 <div className="text-sm text-white/80">{stat.label}</div>
-              </motion.div>
+              </MotionDiv>
             ))}
-          </motion.div>
+          </MotionDiv>
         </div>
 
         {/* Wave divider */}
@@ -213,7 +218,7 @@ export default function HomePage() {
                 featured: true,
               },
             ].map((property, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -289,7 +294,7 @@ export default function HomePage() {
                     View Details
                   </Link>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -325,7 +330,7 @@ export default function HomePage() {
                 desc: "Professional property management services to maintain and enhance the value of your real estate investments.",
               },
             ].map((service, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -342,7 +347,7 @@ export default function HomePage() {
                   {service.title}
                 </h3>
                 <p className="text-gray-600 text-center">{service.desc}</p>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -379,7 +384,7 @@ export default function HomePage() {
                 desc: "98% client satisfaction rate with personalized service tailored to your needs.",
               },
             ].map((feature, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -399,7 +404,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
                 <p className="opacity-90">{feature.desc}</p>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -441,7 +446,7 @@ export default function HomePage() {
                 avatar: "SV",
               },
             ].map((testimonial, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -466,7 +471,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>
@@ -511,7 +516,7 @@ export default function HomePage() {
                 step: "04",
               },
             ].map((process, index) => (
-              <motion.div
+              <MotionDiv
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -527,7 +532,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3">{process.title}</h3>
                 <p className="text-gray-600">{process.desc}</p>
-              </motion.div>
+              </MotionDiv>
             ))}
           </div>
         </div>

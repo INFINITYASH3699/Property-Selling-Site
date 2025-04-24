@@ -3,11 +3,24 @@
 import { useState, useEffect, useContext, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Heart, User, LogOut, Plus, ChevronDown, Home, Search, Menu, X, MapPin, Building } from "lucide-react";
+import {
+  Heart,
+  User,
+  LogOut,
+  Plus,
+  ChevronDown,
+  Home,
+  Search,
+  Menu,
+  X,
+  MapPin,
+  Building,
+} from "lucide-react";
 import { AuthContext } from "@/context/AuthContext";
 import { WishlistContext } from "@/context/WishlistContext";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import { MotionDiv } from "../MotionWrapper";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,7 +34,8 @@ export default function Header() {
   const userDropdownRef = useRef(null);
 
   // Get auth context
-  const { user, isAuthenticated, isAgent, logout, loading: authLoading } = useContext(AuthContext);
+  const { user, isAuthenticated, isAgent, logout, loading: authLoading } =
+    useContext(AuthContext);
   const { wishlist } = useContext(WishlistContext);
 
   // Handle scroll effect
@@ -37,8 +51,11 @@ export default function Header() {
   // Handle click outside for mobile menu
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target) &&
-          event.target.id !== "mobile-menu-button") {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target) &&
+        event.target.id !== "mobile-menu-button"
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -50,8 +67,11 @@ export default function Header() {
   // Handle click outside for user dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target) &&
-          !event.target.closest(".user-dropdown-trigger")) {
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target) &&
+        !event.target.closest(".user-dropdown-trigger")
+      ) {
         setShowUserDropdown(false);
       }
     };
@@ -86,7 +106,11 @@ export default function Header() {
 
   const navItems = [
     { name: "Home", path: "/", icon: <Home className="w-5 h-5 mr-2" /> },
-    { name: "Properties", path: "/listings", icon: <Building className="w-5 h-5 mr-2" /> },
+    {
+      name: "Properties",
+      path: "/listings",
+      icon: <Building className="w-5 h-5 mr-2" />,
+    },
     { name: "Locations", path: "/locations", icon: <MapPin className="w-5 h-5 mr-2" /> },
     { name: "About", path: "/about", icon: <User className="w-5 h-5 mr-2" /> },
     { name: "Contact", path: "/contact", icon: <Search className="w-5 h-5 mr-2" /> },
@@ -95,9 +119,7 @@ export default function Header() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-md"
-          : "bg-white"
+        isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white"
       }`}
     >
       <div className="container mx-auto px-4 py-3 lg:py-4">
@@ -116,7 +138,8 @@ export default function Header() {
           <nav className="hidden lg:block">
             <ul className="flex space-x-8">
               {navItems.map((item) => {
-                const isActive = pathname === item.path ||
+                const isActive =
+                  pathname === item.path ||
                   (item.path !== "/" && pathname.startsWith(item.path));
 
                 return (
@@ -210,7 +233,7 @@ export default function Header() {
                 {/* User Dropdown Menu */}
                 <AnimatePresence>
                   {showUserDropdown && (
-                    <motion.div
+                    <MotionDiv
                       ref={userDropdownRef}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -219,7 +242,9 @@ export default function Header() {
                       className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
                     >
                       <div className="px-4 py-3 border-b border-gray-200">
-                        <p className="text-sm font-semibold text-gray-900">{user?.name}</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {user?.name}
+                        </p>
                         <p className="text-xs text-gray-500">{user?.email}</p>
                       </div>
 
@@ -254,7 +279,7 @@ export default function Header() {
                           Sign Out
                         </div>
                       </button>
-                    </motion.div>
+                    </MotionDiv>
                   )}
                 </AnimatePresence>
               </div>
@@ -288,7 +313,7 @@ export default function Header() {
         {/* Search Bar Modal */}
         <AnimatePresence>
           {showSearchBar && (
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -296,7 +321,7 @@ export default function Header() {
               className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20"
               onClick={() => setShowSearchBar(false)}
             >
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
@@ -336,7 +361,13 @@ export default function Header() {
                   <div className="mt-4">
                     <p className="text-sm text-gray-500 mb-2">Popular searches:</p>
                     <div className="flex flex-wrap gap-2">
-                      {["Apartments in Mumbai", "Villas in Bangalore", "Houses in Delhi", "Luxury Homes", "Rental Properties"].map((term) => (
+                      {[
+                        "Apartments in Mumbai",
+                        "Villas in Bangalore",
+                        "Houses in Delhi",
+                        "Luxury Homes",
+                        "Rental Properties",
+                      ].map((term) => (
                         <button
                           key={term}
                           onClick={() => {
@@ -353,15 +384,15 @@ export default function Header() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
+              </MotionDiv>
+            </MotionDiv>
           )}
         </AnimatePresence>
 
         {/* Mobile Navigation */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
+            <MotionDiv
               ref={mobileMenuRef}
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
@@ -372,7 +403,8 @@ export default function Header() {
               <nav className="py-4">
                 <ul className="space-y-3 px-4">
                   {navItems.map((item) => {
-                    const isActive = pathname === item.path ||
+                    const isActive =
+                      pathname === item.path ||
                       (item.path !== "/" && pathname.startsWith(item.path));
 
                     return (
@@ -445,7 +477,7 @@ export default function Header() {
                   )}
                 </ul>
               </nav>
-            </motion.div>
+            </MotionDiv>
           )}
         </AnimatePresence>
       </div>

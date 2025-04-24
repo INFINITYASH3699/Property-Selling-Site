@@ -50,7 +50,7 @@ app.use(helmet({
 app.use(xss()); // Sanitize inputs
 
 // IMPORTANT: Define the specific allowed origin
-const allowedOrigin = 'https://varad-properties.vercel.app';
+const allowedOrigin = process.env.CLIENT_URL;
 
 // Configure CORS for all regular requests - no wildcard when using credentials
 const corsOptions = {

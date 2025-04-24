@@ -1,14 +1,15 @@
 // app/listings/page.js
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PropertyListings from '../../components/listings/PropertyListings';
 import Pagination from '../../components/common/Pagination';
 import { ListingsContext } from '../../context/ListingsContext';
 import { motion } from 'framer-motion';
 
-export default function Listings() {
+// Create a client component that uses useSearchParams
+function ListingsContent() {
   const searchParams = useSearchParams();
   const { pagination, getListings } = useContext(ListingsContext);
 
@@ -81,5 +82,22 @@ export default function Listings() {
         )}
       </div>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function Listings() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="container mx-auto px-4 flex justify-center items-center">
+          <div className="text-center">
+            <h2 className="text-xl font-medium text-gray-600">Loading listings...</h2>
+          </div>
+        </div>
+      </div>
+    }>
+      <ListingsContent />
+    </Suspense>
   );
 }

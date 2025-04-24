@@ -10,13 +10,15 @@ import {
   ThumbsUp,
   ArrowRight,
   Users,
+  Phone,
   Clock,
   Star,
   ArrowUpRight,
   CheckCircle2,
   BedDouble,
   Bath,
-  SquareFootIcon,
+  Square,
+  Phone,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -272,7 +274,7 @@ export default function HomePage() {
                       <span className="text-xs ml-1">Baths</span>
                     </div>
                     <div className="flex items-center">
-                      <SquareFootIcon className="mr-1 h-5 w-5 text-gray-500" />
+                      <Square className="mr-1 h-5 w-5 text-gray-500" />
                       <span>{property.sqft}</span>
                       <span className="text-xs ml-1">Sq Ft</span>
                     </div>

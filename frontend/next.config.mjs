@@ -7,6 +7,7 @@ const nextConfig = {
       'is1-2.housingcdn.com',
       'images.nobroker.in',
       'housingcdn.com',
+      'images.unsplash.com',
     ],
     remotePatterns: [
       {
@@ -14,6 +15,14 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  // Enable React StrictMode for better development experience
+  reactStrictMode: true,
+  // Configure server settings for Vercel
+  experimental: {
+    serverActions: {
+      allowedOrigins: ["localhost:3000", "*.vercel.app", "*.now.sh"],
+    },
   },
 };
 

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -21,11 +21,7 @@ import {
   Square,
   Phone,
 } from "lucide-react";
-import {
-  MotionDiv,
-  MotionH1,
-  MotionP,
-} from "../components/MotionWrapper";
+import { MotionDiv, MotionH1, MotionP } from "../components/MotionWrapper";
 
 export default function HomePage() {
   // Animation variants for staggered animations
@@ -52,9 +48,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Updated with modern design */}
+      {/* Hero Section - Updated with light theme */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background image with gradient overlay */}
+        {/* Background image with gradient overlay - Lightened gradient */}
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop"
@@ -64,22 +60,23 @@ export default function HomePage() {
             quality={90}
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-white/40 to-white/30"></div>
         </div>
 
-        {/* Hero content */}
+        {/* Hero content - Updated with dark text for light theme */}
         <div className="container mx-auto px-4 md:px-8 relative z-10 py-20">
           <div className="max-w-4xl">
             <MotionH1
-              className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight"
+              className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 mb-6 leading-tight"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
             >
-              Find Your Dream Home With <span className="text-primary-500">Varad Properties</span>
+              Find Your Dream Home With{" "}
+              <span className="text-primary-600">Varad Properties</span>
             </MotionH1>
             <MotionP
-              className="text-xl md:text-2xl text-white mb-10 max-w-3xl opacity-90"
+              className="text-xl md:text-2xl text-gray-700 mb-10 max-w-3xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
@@ -88,9 +85,9 @@ export default function HomePage() {
               match your lifestyle across India
             </MotionP>
 
-            {/* Search Bar - Updated with improved styling */}
+            {/* Search Bar - Updated with improved styling for light theme */}
             <MotionDiv
-              className="bg-white p-4 lg:p-5 rounded-2xl shadow-2xl mb-8 md:mb-0 max-w-3xl"
+              className="border border-gray-300 p-4 lg:p-5 rounded-2xl shadow-xl mb-8 md:mb-0 max-w-3xl bg-white/80"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.4 }}
@@ -101,26 +98,31 @@ export default function HomePage() {
                   <input
                     type="text"
                     placeholder="Search by location, property type, or features..."
-                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 text-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                    className="w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 text-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition-all border border-gray-200"
                   />
                 </div>
-                <button className="bg-primary-600 hover:bg-primary-700 text-white font-medium md:text-lg px-8 py-4 rounded-xl transition duration-300 flex-shrink-0 flex items-center justify-center">
+                <button className="bg-primary-600 hover:bg-primary-700 font-medium md:text-lg px-8 py-4 rounded-xl transition duration-300 flex-shrink-0 flex items-center justify-center">
                   <Search className="w-5 h-5 mr-2" />
                   Search
                 </button>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="text-sm text-gray-500 mr-2">Popular:</span>
-                {["Mumbai", "Delhi", "Bangalore", "Villas", "Apartments"].map((tag) => (
-                  <span key={tag} className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full text-gray-800 cursor-pointer">
-                    {tag}
-                  </span>
-                ))}
+                {["Mumbai", "Delhi", "Bangalore", "Villas", "Apartments"].map(
+                  (tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-full text-gray-800 cursor-pointer"
+                    >
+                      {tag}
+                    </span>
+                  )
+                )}
               </div>
             </MotionDiv>
           </div>
 
-          {/* Property Stats - Updated with modern card styling */}
+          {/* Property Stats - Updated with light theme styling */}
           <MotionDiv
             className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6 mt-12 max-w-4xl"
             variants={containerVariants}
@@ -128,31 +130,53 @@ export default function HomePage() {
             animate="visible"
           >
             {[
-              { label: "Properties", value: "1,500+", icon: <Building className="w-6 h-6" /> },
-              { label: "Happy Clients", value: "5,000+", icon: <Users className="w-6 h-6" /> },
-              { label: "Cities Covered", value: "15+", icon: <MapPin className="w-6 h-6" /> },
-              { label: "Satisfaction", value: "98%", icon: <Star className="w-6 h-6" /> },
+              {
+                label: "Properties",
+                value: "1,500+",
+                icon: <Building className="w-6 h-6" />,
+              },
+              {
+                label: "Happy Clients",
+                value: "5,000+",
+                icon: <Users className="w-6 h-6" />,
+              },
+              {
+                label: "Cities Covered",
+                value: "15+",
+                icon: <MapPin className="w-6 h-6" />,
+              },
+              {
+                label: "Satisfaction",
+                value: "98%",
+                icon: <Star className="w-6 h-6" />,
+              },
             ].map((stat, index) => (
               <MotionDiv
                 key={index}
                 variants={itemVariants}
-                className="bg-white/10 backdrop-blur-lg p-4 rounded-xl text-center border border-white/20"
+                className="bg-white/90 backdrop-blur-lg p-4 rounded-xl text-center border border-gray-200 shadow-md"
               >
                 <div className="flex justify-center mb-3">
-                  <div className="p-2 rounded-full bg-primary-500/20">
-                    {stat.icon}
+                  <div className="p-2 rounded-full bg-primary-100">
+                    <div className="text-primary-600">{stat.icon}</div>
                   </div>
                 </div>
-                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-white/80">{stat.label}</div>
+                <div className="text-3xl font-bold text-gray-800 mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
               </MotionDiv>
             ))}
           </MotionDiv>
         </div>
 
-        {/* Wave divider */}
+        {/* Wave divider - Updated color */}
         <div className="absolute bottom-0 left-0 right-0 text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 320"
+            className="w-full"
+          >
             <path
               fill="currentColor"
               fillOpacity="1"
@@ -162,7 +186,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Properties */}
+      {/* Featured Properties - Already light theme */}
       <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-12">
@@ -189,7 +213,8 @@ export default function HomePage() {
                 title: "Luxury Villa with Pool",
                 location: "Juhu, Mumbai",
                 price: "₹3,95,00,000",
-                image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop",
+                image:
+                  "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop",
                 beds: 5,
                 baths: 6,
                 sqft: "6,500",
@@ -200,7 +225,8 @@ export default function HomePage() {
                 title: "Modern Downtown Apartment",
                 location: "MG Road, Bangalore",
                 price: "₹2,85,00,000",
-                image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop",
+                image:
+                  "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop",
                 beds: 3,
                 baths: 3,
                 sqft: "3,200",
@@ -210,7 +236,8 @@ export default function HomePage() {
                 title: "Oceanfront Beach House",
                 location: "Goa",
                 price: "₹6,50,00,000",
-                image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop",
+                image:
+                  "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop",
                 beds: 4,
                 baths: 5,
                 sqft: "4,800",
@@ -255,7 +282,9 @@ export default function HomePage() {
                   {/* Location */}
                   <div className="absolute bottom-4 left-4 text-white flex items-center">
                     <MapPin className="h-4 w-4 mr-1" />
-                    <span className="text-sm font-medium">{property.location}</span>
+                    <span className="text-sm font-medium">
+                      {property.location}
+                    </span>
                   </div>
                 </div>
 
@@ -300,7 +329,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Services Section - Already light theme */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -353,14 +382,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20 px-4 bg-primary-600 text-white">
+      {/* Why Choose Us - Updated to light theme */}
+      <section className="py-20 px-4 bg-primary-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
               Why Choose Varad Properties
             </h2>
-            <p className="text-xl opacity-90 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
               With over 15 years of experience, we deliver exceptional service
               and results
             </p>
@@ -369,17 +398,17 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
-                icon: <MapPin className="h-10 w-10 text-white" />,
+                icon: <MapPin className="h-10 w-10" />,
                 title: "Local Expertise",
                 desc: "Deep understanding of local real estate markets to help you make informed decisions.",
               },
               {
-                icon: <Shield className="h-10 w-10 text-white" />,
+                icon: <Shield className="h-10 w-10" />,
                 title: "Trusted Advisor",
                 desc: "Honest, transparent guidance from certified real estate professionals.",
               },
               {
-                icon: <ThumbsUp className="h-10 w-10 text-white" />,
+                icon: <ThumbsUp className="h-10 w-10" />,
                 title: "Client Satisfaction",
                 desc: "98% client satisfaction rate with personalized service tailored to your needs.",
               },
@@ -390,27 +419,37 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-8 bg-primary-700 rounded-xl overflow-hidden relative"
+                className="p-8 bg-white rounded-xl overflow-hidden relative shadow-sm border border-gray-100"
               >
                 <div className="absolute -right-4 -bottom-4 opacity-10">
-                  <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
-                    <path d="M50 0C77.6142 0 100 22.3858 100 50C100 77.6142 77.6142 100 50 100C22.3858 100 0 77.6142 0 50C0 22.3858 22.3858 0 50 0Z" fill="white"/>
+                  <svg
+                    width="100"
+                    height="100"
+                    viewBox="0 0 100 100"
+                    fill="none"
+                  >
+                    <path
+                      d="M50 0C77.6142 0 100 22.3858 100 50C100 77.6142 77.6142 100 50 100C22.3858 100 0 77.6142 0 50C0 22.3858 22.3858 0 50 0Z"
+                      fill="#4F46E5"
+                    />
                   </svg>
                 </div>
                 <div className="mb-6">
-                  <div className="p-3 bg-primary-500 rounded-full inline-block">
+                  <div className="p-3 bg-primary-100 rounded-full inline-block text-primary-600">
                     {feature.icon}
                   </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-                <p className="opacity-90">{feature.desc}</p>
+                <h3 className="text-xl font-bold mb-4 text-gray-800">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600">{feature.desc}</p>
               </MotionDiv>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* Testimonials - Already light theme */}
       <section className="py-20 px-4 bg-white">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -457,7 +496,9 @@ export default function HomePage() {
                 <div className="absolute -top-5 left-8">
                   <div className="text-5xl text-primary-400">"</div>
                 </div>
-                <p className="text-gray-600 italic mb-6 pt-4">{testimonial.quote}</p>
+                <p className="text-gray-600 italic mb-6 pt-4">
+                  {testimonial.quote}
+                </p>
                 <div className="flex items-center">
                   <div className="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center mr-4 text-primary-700 font-bold">
                     {testimonial.avatar}
@@ -477,7 +518,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Process Section - Already light theme */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="container mx-auto">
           <div className="text-center mb-16">
@@ -530,7 +571,9 @@ export default function HomePage() {
                 <div className="mb-4 bg-primary-50 p-4 rounded-full inline-block">
                   {process.icon}
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-3">{process.title}</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-3">
+                  {process.title}
+                </h3>
                 <p className="text-gray-600">{process.desc}</p>
               </MotionDiv>
             ))}
@@ -538,9 +581,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 bg-gray-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
+      {/* CTA Section - Updated to light theme */}
+      <section className="py-20 px-4 bg-primary-50 text-gray-800 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-70">
           <Image
             src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=2073&auto=format&fit=crop"
             alt="Background pattern"
@@ -550,24 +593,24 @@ export default function HomePage() {
         </div>
         <div className="container mx-auto relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900">
               Ready to Find Your Dream Property?
             </h2>
-            <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
               Schedule a consultation with one of our real estate experts today
               and take the first step towards your new home.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
                 href="/listings"
-                className="bg-primary-600 hover:bg-primary-700 text-white font-medium px-8 py-4 rounded-lg transition duration-300 flex items-center justify-center"
+                className="bg-white/50 hover:bg-white/20 font-medium px-8 py-4 border border-white/70 rounded-lg transition duration-300 flex items-center justify-center"
               >
                 <Building className="w-5 h-5 mr-2" />
                 Browse Properties
               </Link>
               <Link
                 href="/contact"
-                className="bg-white text-gray-900 hover:bg-gray-100 font-medium px-8 py-4 rounded-lg transition duration-300 flex items-center justify-center"
+                className="bg-white text-gray-900 hover:bg-gray-100 font-medium px-8 py-4 rounded-lg transition duration-300 flex items-center justify-center border border-gray-200"
               >
                 <Phone className="w-5 h-5 mr-2" />
                 Contact Us
@@ -577,7 +620,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Newsletter */}
+      {/* Newsletter - Already light theme */}
       <section className="py-16 px-4 bg-white border-t border-gray-100">
         <div className="max-w-4xl mx-auto text-center">
           <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -593,7 +636,7 @@ export default function HomePage() {
               placeholder="Your email address"
               className="flex-grow px-4 py-3 rounded-l-lg border-gray-300 border focus:outline-none focus:ring-2 focus:ring-primary-500 sm:rounded-r-none"
             />
-            <button className="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-3 rounded-lg sm:rounded-l-none mt-2 sm:mt-0 transition duration-300">
+            <button className="bg-primary-600 hover:bg-primary-700 font-medium px-6 py-3 border border-gray-300 rounded-lg sm:rounded-l-none mt-2 sm:mt-0 transition duration-300">
               Subscribe
             </button>
           </div>

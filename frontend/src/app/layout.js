@@ -15,12 +15,12 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning className="light">
-      <body className={`${inter.className} bg-white text-gray-800`}>
+      <body className={`${inter.className} bg-white text-gray-800 bg-subtle-pattern`}>
         <ThemeProvider>
           <AuthProvider>
             <ListingsProvider>
               <WishlistProvider>
-                <div className="flex flex-col min-h-screen bg-gray-50">
+                <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-50 to-blue-50/30 bg-subtle-pattern">
                   <Header />
                   <main className="flex-grow">
                     {children}

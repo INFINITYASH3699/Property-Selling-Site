@@ -119,14 +119,14 @@ export default function Header() {
   return (
     <header
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white"
+        isScrolled ? "bg-white/95 backdrop-blur-md shadow-md" : "bg-white/90 backdrop-blur-sm"
       }`}
     >
       <div className="container mx-auto px-4 py-3 lg:py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 z-10">
-            <div className="w-10 h-10 bg-primary-600 text-white rounded-lg flex items-center justify-center">
+          <Link href="/" className="flex items-center space-x-1 z-10">
+            <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
               <Home className="w-6 h-6" />
             </div>
             <h1 className="text-2xl font-bold text-gray-800">
@@ -180,7 +180,7 @@ export default function Header() {
             {isAuthenticated && isAgent && (
               <Link
                 href="/properties/create"
-                className="hidden md:flex items-center px-3 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors shadow-sm"
+                className="hidden md:flex items-center px-3 py-2 text-sm font-medium bg-green-600 rounded-lg hover:bg-green-700 transition-colors shadow-sm"
               >
                 <Plus className="w-4 h-4 mr-1" />
                 Add Property
@@ -195,7 +195,7 @@ export default function Header() {
             >
               <Heart className="w-5 h-5" />
               {wishlist && wishlist.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-primary-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">
+                <span className="absolute -top-1 -right-1 bg-primary-500 text-xs w-4 h-4 flex items-center justify-center rounded-full">
                   {wishlist.length}
                 </span>
               )}
@@ -239,7 +239,7 @@ export default function Header() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200"
+                      className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-1 z-50 border border-gray-200 ring-1 ring-black/5"
                     >
                       <div className="px-4 py-3 border-b border-gray-200">
                         <p className="text-sm font-semibold text-gray-900">
@@ -287,7 +287,7 @@ export default function Header() {
               // Not authenticated: Show login/register button
               <Link
                 href="/login"
-                className="hidden md:flex items-center px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm"
+                className="hidden md:flex items-center px-4 py-2 text-sm font-medium bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors shadow-sm"
               >
                 <User className="w-4 h-4 mr-2" />
                 Sign In
@@ -353,7 +353,7 @@ export default function Header() {
                     </div>
                     <button
                       type="submit"
-                      className="bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-3 rounded-r-lg transition duration-300"
+                      className="bg-primary-600 hover:bg-primary-700 font-medium px-6 py-3 rounded-r-lg transition duration-300"
                     >
                       Search
                     </button>
@@ -432,7 +432,7 @@ export default function Header() {
                         <li>
                           <Link
                             href="/properties/create"
-                            className="flex items-center py-2 px-3 rounded-lg text-white bg-green-600"
+                            className="flex items-center py-2 px-3 rounded-lg bg-green-600"
                             onClick={() => setIsMobileMenuOpen(false)}
                           >
                             <Plus className="w-5 h-5 mr-2" />
@@ -467,7 +467,7 @@ export default function Header() {
                     <li>
                       <Link
                         href="/login"
-                        className="flex items-center py-2 px-3 rounded-lg text-white bg-primary-600"
+                        className="flex items-center py-2 px-3 rounded-lg bg-primary-600"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         <User className="w-5 h-5 mr-2" />

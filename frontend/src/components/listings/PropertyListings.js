@@ -208,7 +208,7 @@ export default function PropertyListings() {
                 placeholder="Search by title or location..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300"
               />
               {/* Search Icon */}
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -232,7 +232,7 @@ export default function PropertyListings() {
           <button
             ref={filterButtonRef}
             onClick={() => setShowFilterDropdown(!showFilterDropdown)}
-            className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 shadow-sm"
+            className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 shadow-md hover:bg-gray-50 transition-colors"
           >
             <Filter size={18} className="mr-2" />
             Filters
@@ -305,7 +305,7 @@ export default function PropertyListings() {
   return (
     <div className="p-4 lg:p-8">
       {/* Filter Toggle and Sort Controls */}
-      <div className="mb-6 bg-white rounded-lg shadow-sm p-4 md:p-6">
+      <div className="mb-6 bg-white rounded-lg shadow-md p-4 md:p-6 border border-gray-100">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0">
           {/* Property Count */}
           <h2 className="text-xl font-bold text-gray-800">
@@ -321,7 +321,7 @@ export default function PropertyListings() {
                   placeholder="Search by title or location..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-300"
                 />
                 {/* Search Icon */}
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -345,7 +345,7 @@ export default function PropertyListings() {
 
             {/* Suggestions Dropdown */}
             {suggestions.length > 0 && (
-              <div className="absolute top-12 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <div className="absolute top-12 w-full bg-white border border-gray-200 rounded-lg shadow-xl z-50 ring-1 ring-black/5">
                 <ul className="py-2">
                   {suggestions.map((suggestion, index) => (
                     <li
@@ -362,7 +362,7 @@ export default function PropertyListings() {
 
             {/* Loading Spinner */}
             {isTyping && (
-              <div className="absolute top-12 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <div className="absolute top-12 w-full bg-white border border-gray-200 rounded-lg shadow-xl z-50 ring-1 ring-black/5">
                 <div className="px-4 py-2 text-gray-700 flex items-center justify-center">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
                 </div>
@@ -456,7 +456,7 @@ export default function PropertyListings() {
               {showFilterDropdown && (
                 <div
                   ref={filterDropdownRef}
-                  className="absolute right-0 mt-2 w-64 md:w-96 bg-white rounded-lg border border-gray-200 shadow-lg z-30"
+                  className="absolute right-0 mt-2 w-64 md:w-96 bg-white rounded-lg border border-gray-200 shadow-xl z-30 ring-1 ring-black/5"
                 >
                   <FilterDropdown
                     initialFilters={localFilters}

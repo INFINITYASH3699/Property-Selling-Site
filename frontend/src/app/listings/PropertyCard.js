@@ -112,7 +112,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
   if (viewType === 'grid') {
     return (
       <MotionDiv
-        className="bg-white rounded-xl overflow-hidden h-full shadow-property transition-all duration-300"
+        className="bg-white rounded-xl overflow-hidden h-full shadow-property transition-all duration-300 border border-gray-100"
         whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)' }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -137,14 +137,14 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
               </div>
 
               {/* Location in image */}
-              <div className="absolute bottom-3 left-3 text-white flex items-center">
+              <div className="absolute bottom-3 left-3 text-white flex items-center bg-black/30 px-2 py-1 rounded-full shadow-sm backdrop-blur-sm">
                 <MapPin size={16} className="mr-1" />
                 <span className="text-sm font-medium">{formatAddress()}</span>
               </div>
 
               {/* Status Badge */}
               <div className="absolute top-3 left-3 z-10">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusStyle(property.status)}`}>
+                <span className={`px-2 py-1 text-xs font-medium rounded-full shadow-sm ${getStatusStyle(property.status)}`}>
                   {property.status}
                 </span>
               </div>
@@ -152,7 +152,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
               {/* Featured Badge */}
               {property.featured && (
                 <div className="absolute top-3 right-14 z-10">
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-amber-500 text-white">
+                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-amber-500 text-white shadow-sm">
                     Featured
                   </span>
                 </div>
@@ -162,7 +162,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
               <button
                 onClick={handleWishlistToggle}
                 disabled={isWishlistLoading}
-                className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-all ${
+                className={`absolute top-3 right-3 z-10 p-2 rounded-full bg-white/95 backdrop-blur-sm shadow-md ring-1 ring-black/5 transition-all ${
                   isInWishlistState ? 'text-red-500' : 'text-gray-500 hover:text-red-500'
                 }`}
                 aria-label={isInWishlistState ? "Remove from wishlist" : "Add to wishlist"}
@@ -189,24 +189,24 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
               </div>
 
               {/* Title */}
-              <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-1">
+              <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-1 leading-tight">
                 {property.title}
               </h3>
 
               {/* Features */}
-              <div className="mt-auto border-t border-gray-100 pt-3 flex justify-between text-gray-600 text-sm">
+              <div className="mt-auto border-t border-gray-200 pt-3 flex justify-between text-gray-600 text-sm">
                 <div className="flex items-center">
-                  <BedDouble size={16} className="mr-1 text-gray-400" />
+                  <BedDouble size={16} className="mr-1 text-primary-500" />
                   <span>{property.bedrooms || 0}</span>
                 </div>
 
                 <div className="flex items-center">
-                  <Bath size={16} className="mr-1 text-gray-400" />
+                  <Bath size={16} className="mr-1 text-primary-500" />
                   <span>{property.bathrooms || 0}</span>
                 </div>
 
                 <div className="flex items-center">
-                  <Square size={16} className="mr-1 text-gray-400" />
+                  <Square size={16} className="mr-1 text-primary-500" />
                   <span>{property.propertySize} sqft</span>
                 </div>
               </div>
@@ -214,7 +214,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
 
             {/* View Details Button */}
             <div className="p-4 pt-0 mt-auto">
-              <div className="flex items-center justify-center text-primary-600 font-medium text-sm hover:text-primary-700 transition-colors">
+              <div className="flex items-center justify-center text-primary-600 font-medium text-sm hover:text-primary-700 transition-colors bg-primary-50 py-2 rounded-md">
                 View Details
                 <ArrowRight size={16} className="ml-1" />
               </div>
@@ -228,7 +228,7 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
   // List view card
   return (
     <MotionDiv
-      className="bg-white rounded-xl overflow-hidden shadow-property transition-all duration-300"
+      className="bg-white rounded-xl overflow-hidden shadow-property transition-all duration-300 border border-gray-100"
       whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)' }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -321,29 +321,29 @@ export default function PropertyCard({ property, viewType = 'grid' }) {
             </div>
 
             {/* Features and CTA */}
-            <div className="flex flex-wrap justify-between items-center border-t border-gray-100 pt-4">
+            <div className="flex flex-wrap justify-between items-center border-t border-gray-200 pt-4">
               <div className="flex flex-wrap gap-6 items-center text-gray-600">
                 <div className="flex items-center">
-                  <BedDouble size={18} className="mr-1 text-gray-500" />
+                  <BedDouble size={18} className="mr-1 text-primary-500" />
                   <span className="mr-1">{property.bedrooms || 0}</span>
                   <span className="text-xs text-gray-400">Beds</span>
                 </div>
 
                 <div className="flex items-center">
-                  <Bath size={18} className="mr-1 text-gray-500" />
+                  <Bath size={18} className="mr-1 text-primary-500" />
                   <span className="mr-1">{property.bathrooms || 0}</span>
                   <span className="text-xs text-gray-400">Baths</span>
                 </div>
 
                 <div className="flex items-center">
-                  <Square size={18} className="mr-1 text-gray-500" />
+                  <Square size={18} className="mr-1 text-primary-500" />
                   <span className="mr-1">{property.propertySize}</span>
                   <span className="text-xs text-gray-400">sqft</span>
                 </div>
               </div>
 
               <div className="mt-4 md:mt-0">
-                <span className="inline-flex items-center text-primary-600 font-medium hover:text-primary-700 transition-colors">
+                <span className="inline-flex items-center text-primary-600 font-medium hover:text-primary-700 transition-colors bg-primary-50 px-4 py-2 rounded-md">
                   View Details
                   <ArrowRight size={16} className="ml-1" />
                 </span>

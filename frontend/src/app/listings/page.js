@@ -1,7 +1,7 @@
 // app/listings/page.js
 'use client';
 
-import { useState, useEffect, useContext, Suspense } from 'react';
+import { useState, useEffect, useContext, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PropertyListings from '../../components/listings/PropertyListings';
 import Pagination from '../../components/common/Pagination';
@@ -14,38 +14,50 @@ function ListingsContent() {
   const { pagination, getListings } = useContext(ListingsContext);
 
   // Get initial filters from URL query parameters
+  const initialFetchRef = useRef(false);
+
   useEffect(() => {
-    const initialFilters = {};
+    // Prevent multiple re-renders causing multiple API calls
+    if (initialFetchRef.current) {
+      // Only process URL changes after initial load
+      const initialFilters = {};
 
-    // Check for search query
-    const q = searchParams.get('q');
-    if (q) initialFilters.query = q;
+      // Check for search query
+      const q = searchParams.get('q');
+      if (q) initialFilters.query = q;
 
-    // Check for property type
-    const propertyType = searchParams.get('type');
-    if (propertyType) initialFilters.propertyType = propertyType;
+      // Check for property type
+      const propertyType = searchParams.get('type');
+      if (propertyType) initialFilters.propertyType = propertyType;
 
-    // Check for status
-    const status = searchParams.get('status');
-    if (status) initialFilters.status = status;
+      // Check for status
+      const status = searchParams.get('status');
+      if (status) initialFilters.status = status;
 
-    // Check for bedrooms
-    const bedrooms = searchParams.get('bedrooms');
-    if (bedrooms) initialFilters.bedrooms = bedrooms;
+      // Check for bedrooms
+      const bedrooms = searchParams.get('bedrooms');
+      if (bedrooms) initialFilters.bedrooms = bedrooms;
 
-    // Check for price ranges
-    const minPrice = searchParams.get('minPrice');
-    if (minPrice) initialFilters.minPrice = minPrice;
+      // Check for price ranges
+      const minPrice = searchParams.get('minPrice');
+      if (minPrice) initialFilters.minPrice = minPrice;
 
-    const maxPrice = searchParams.get('maxPrice');
-    if (maxPrice) initialFilters.maxPrice = maxPrice;
+      const maxPrice = searchParams.get('maxPrice');
+      if (maxPrice) initialFilters.maxPrice = maxPrice;
 
-    // Get page number
-    const page = parseInt(searchParams.get('page'), 10) || 1;
+      // Get page number
+      const page = parseInt(searchParams.get('page'), 10) || 1;
 
-    // Fetch listings with filters
-    getListings(page, initialFilters);
-  }, [searchParams, getListings]);
+      // Only fetch if actual URL params have changed
+      if (Object.keys(initialFilters).length > 0 || page > 1) {
+        console.log('Fetching with URL params', initialFilters);
+        getListings(page, initialFilters);
+      }
+    } else {
+      // First run, just mark as initialized
+      initialFetchRef.current = true;
+    }
+  }, [searchParams]);
 
   // Handle page change
   const handlePageChange = (page) => {

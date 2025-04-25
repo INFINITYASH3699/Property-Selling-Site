@@ -1,92 +1,123 @@
 // app/dashboard/page.js
-'use client';
+"use client";
 
-import { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { ListingsContext } from '@/context/ListingsContext';
-import { AuthContext } from '@/context/AuthContext';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { 
-  Home, User, Heart, Settings, MessageSquare, Plus, Edit, Trash2, Eye, Bed, Bath, Square
-} from 'lucide-react';
+import { useState, useEffect, useContext, useRef } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { ListingsContext } from "@/context/ListingsContext";
+import { AuthContext } from "@/context/AuthContext";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import {
+  Home,
+  User,
+  Heart,
+  Settings,
+  MessageSquare,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
+  Bed,
+  Bath,
+  Square,
+} from "lucide-react";
 
 export default function DashboardPage() {
   const router = useRouter();
   const { getMyListings, deleteListing } = useContext(ListingsContext);
-  const { user, isAuthenticated, isAgent, isAdmin, loading: authLoading } = useContext(AuthContext);
-  
-  const [activeTab, setActiveTab] = useState('properties');
+  const {
+    user,
+    isAuthenticated,
+    isAgent,
+    isAdmin,
+    loading: authLoading,
+  } = useContext(AuthContext);
+
+  const [activeTab, setActiveTab] = useState("properties");
   const [myListings, setMyListings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState(null);
-  
+
   // Redirect if not authenticated
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [authLoading, isAuthenticated, router]);
-  
+
   // Fetch user's properties
+  const fetchPropertiesRef = useRef(false);
+
   useEffect(() => {
-    const fetchMyProperties = async () => {
-      if (!isAuthenticated || !isAgent) return;
-      
-      try {
-        setIsLoading(true);
-        const properties = await getMyListings();
-        setMyListings(properties);
-      } catch (err) {
-        setError('Failed to fetch your properties');
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    if (isAuthenticated && (isAgent || isAdmin)) {
+    // Prevent multiple re-renders from causing infinite API calls
+    if (
+      !fetchPropertiesRef.current &&
+      isAuthenticated &&
+      (isAgent || isAdmin) &&
+      !authLoading
+    ) {
+      const fetchMyProperties = async () => {
+        if (!isAuthenticated || !isAgent) return;
+
+        try {
+          setIsLoading(true);
+          console.log("Fetching my properties...");
+          const properties = await getMyListings();
+          setMyListings(properties);
+          console.log("Properties fetched successfully:", properties.length);
+        } catch (err) {
+          setError("Failed to fetch your properties");
+          console.error("Error fetching properties:", err);
+        } finally {
+          setIsLoading(false);
+          // Mark as fetched to prevent multiple calls
+          fetchPropertiesRef.current = true;
+        }
+      };
+
       fetchMyProperties();
     }
-  }, [isAuthenticated, isAgent, isAdmin, getMyListings]);
-  
+  }, [isAuthenticated, isAgent, isAdmin, authLoading]);
+
   // Handle property delete
   const handleDeleteProperty = async () => {
     if (!propertyToDelete) return;
-    
+
     try {
       await deleteListing(propertyToDelete);
-      setMyListings(myListings.filter(property => property._id !== propertyToDelete));
+      setMyListings(
+        myListings.filter((property) => property._id !== propertyToDelete)
+      );
       setShowDeleteModal(false);
       setPropertyToDelete(null);
     } catch (err) {
-      setError('Failed to delete property');
+      setError("Failed to delete property");
       console.error(err);
     }
   };
-  
+
   // Format date
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     }).format(date);
   };
-  
+
   // Format price
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
     }).format(price);
   };
-  
+
   if (authLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -94,11 +125,11 @@ export default function DashboardPage() {
       </div>
     );
   }
-  
+
   if (!isAuthenticated) {
     return null; // Will redirect in the useEffect
   }
-  
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="container mx-auto px-4 py-8">
@@ -118,78 +149,84 @@ export default function DashboardPage() {
                       className="rounded-full"
                     />
                   ) : (
-                    <User size={24} className="text-blue-600 dark:text-blue-400" />
+                    <User
+                      size={24}
+                      className="text-blue-600 dark:text-blue-400"
+                    />
                   )}
                 </div>
                 <div>
                   <h2 className="font-bold text-gray-900 dark:text-white">
-                    {user?.name || 'User'}
+                    {user?.name || "User"}
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {user?.role === 'admin' ? 'Administrator' : 
-                      user?.role === 'agent' ? 'Agent' : 'User'}
+                    {user?.role === "admin"
+                      ? "Administrator"
+                      : user?.role === "agent"
+                        ? "Agent"
+                        : "User"}
                   </p>
                 </div>
               </div>
-              
+
               {/* Navigation */}
               <nav className="space-y-1">
                 <button
-                  onClick={() => setActiveTab('profile')}
+                  onClick={() => setActiveTab("profile")}
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                    activeTab === 'profile'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    activeTab === "profile"
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   }`}
                 >
                   <User size={18} className="mr-3" />
                   My Profile
                 </button>
-                
+
                 {(isAgent || isAdmin) && (
                   <button
-                    onClick={() => setActiveTab('properties')}
+                    onClick={() => setActiveTab("properties")}
                     className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                      activeTab === 'properties'
-                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      activeTab === "properties"
+                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     }`}
                   >
                     <Home size={18} className="mr-3" />
                     My Properties
                   </button>
                 )}
-                
+
                 <button
-                  onClick={() => setActiveTab('wishlist')}
+                  onClick={() => setActiveTab("wishlist")}
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                    activeTab === 'wishlist'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    activeTab === "wishlist"
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   }`}
                 >
                   <Heart size={18} className="mr-3" />
                   Wishlist
                 </button>
-                
+
                 <button
-                  onClick={() => setActiveTab('messages')}
+                  onClick={() => setActiveTab("messages")}
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                    activeTab === 'messages'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    activeTab === "messages"
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   }`}
                 >
                   <MessageSquare size={18} className="mr-3" />
                   Messages
                 </button>
-                
+
                 <button
-                  onClick={() => setActiveTab('settings')}
+                  onClick={() => setActiveTab("settings")}
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
-                    activeTab === 'settings'
-                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                    activeTab === "settings"
+                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                   }`}
                 >
                   <Settings size={18} className="mr-3" />
@@ -198,18 +235,18 @@ export default function DashboardPage() {
               </nav>
             </div>
           </div>
-          
+
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
               {/* Properties Tab */}
-              {activeTab === 'properties' && (
+              {activeTab === "properties" && (
                 <div>
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-0">
                       My Properties
                     </h2>
-                    
+
                     <Link
                       href="/properties/create"
                       className="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800"
@@ -218,13 +255,13 @@ export default function DashboardPage() {
                       Add New Property
                     </Link>
                   </div>
-                  
+
                   {error && (
                     <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-md mb-4">
                       {error}
                     </div>
                   )}
-                  
+
                   {isLoading ? (
                     <div className="flex justify-center py-8">
                       <LoadingSpinner />
@@ -232,7 +269,10 @@ export default function DashboardPage() {
                   ) : myListings.length === 0 ? (
                     <div className="text-center py-8">
                       <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full mb-4">
-                        <Home size={32} className="text-gray-500 dark:text-gray-400" />
+                        <Home
+                          size={32}
+                          className="text-gray-500 dark:text-gray-400"
+                        />
                       </div>
                       <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                         No Properties Found
@@ -250,8 +290,11 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {myListings.map(property => (
-                        <div key={property._id} className="flex flex-col md:flex-row border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                      {myListings.map((property) => (
+                        <div
+                          key={property._id}
+                          className="flex flex-col md:flex-row border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
+                        >
                           {/* Property Image */}
                           <div className="relative h-48 md:h-auto md:w-48 bg-gray-200 dark:bg-gray-700">
                             {property.images && property.images.length > 0 ? (
@@ -263,21 +306,29 @@ export default function DashboardPage() {
                               />
                             ) : (
                               <div className="flex items-center justify-center h-full">
-                                <Home size={32} className="text-gray-400 dark:text-gray-500" />
+                                <Home
+                                  size={32}
+                                  className="text-gray-400 dark:text-gray-500"
+                                />
                               </div>
                             )}
                             <div className="absolute top-2 left-2">
-                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                                property.status === 'For Sale' ? 'bg-blue-500 text-white' :
-                                property.status === 'For Rent' ? 'bg-green-500 text-white' :
-                                property.status === 'Sold' ? 'bg-red-500 text-white' :
-                                'bg-yellow-500 text-white'
-                              }`}>
+                              <span
+                                className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                  property.status === "For Sale"
+                                    ? "bg-blue-500 text-white"
+                                    : property.status === "For Rent"
+                                      ? "bg-green-500 text-white"
+                                      : property.status === "Sold"
+                                        ? "bg-red-500 text-white"
+                                        : "bg-yellow-500 text-white"
+                                }`}
+                              >
                                 {property.status}
                               </span>
                             </div>
                           </div>
-                          
+
                           {/* Property Details */}
                           <div className="flex-1 p-4 flex flex-col">
                             <div className="flex-1">
@@ -285,35 +336,42 @@ export default function DashboardPage() {
                                 {property.title}
                               </h3>
                               <p className="text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
-                                {property.address?.city}, {property.address?.state}
+                                {property.address?.city},{" "}
+                                {property.address?.state}
                               </p>
-                              
+
                               <div className="flex items-center space-x-4 mb-3">
                                 <div className="flex items-center text-gray-600 dark:text-gray-400">
                                   <Bed size={16} className="mr-1" />
-                                  <span className="text-sm">{property.bedrooms} Beds</span>
+                                  <span className="text-sm">
+                                    {property.bedrooms} Beds
+                                  </span>
                                 </div>
                                 <div className="flex items-center text-gray-600 dark:text-gray-400">
                                   <Bath size={16} className="mr-1" />
-                                  <span className="text-sm">{property.bathrooms} Baths</span>
+                                  <span className="text-sm">
+                                    {property.bathrooms} Baths
+                                  </span>
                                 </div>
                                 <div className="flex items-center text-gray-600 dark:text-gray-400">
                                   <Square size={16} className="mr-1" />
-                                  <span className="text-sm">{property.propertySize} sqft</span>
+                                  <span className="text-sm">
+                                    {property.propertySize} sqft
+                                  </span>
                                 </div>
                               </div>
-                              
+
                               <div className="mb-3">
                                 <span className="font-bold text-lg text-blue-600 dark:text-blue-400">
                                   {formatPrice(property.price)}
                                 </span>
                               </div>
-                              
+
                               <div className="text-xs text-gray-500 dark:text-gray-400">
                                 Added on {formatDate(property.createdAt)}
                               </div>
                             </div>
-                            
+
                             {/* Actions */}
                             <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                               <Link
@@ -323,7 +381,7 @@ export default function DashboardPage() {
                                 <Eye size={14} className="mr-1" />
                                 View
                               </Link>
-                              
+
                               <Link
                                 href={`/properties/edit/${property._id}`}
                                 className="inline-flex items-center px-3 py-1.5 text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/50"
@@ -331,7 +389,7 @@ export default function DashboardPage() {
                                 <Edit size={14} className="mr-1" />
                                 Edit
                               </Link>
-                              
+
                               <button
                                 onClick={() => {
                                   setPropertyToDelete(property._id);
@@ -350,62 +408,66 @@ export default function DashboardPage() {
                   )}
                 </div>
               )}
-              
+
               {/* Profile Tab */}
-              {activeTab === 'profile' && (
+              {activeTab === "profile" && (
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                     My Profile
                   </h2>
-                  
+
                   <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-md mb-6">
                     <p className="text-blue-700 dark:text-blue-400">
-                      Profile page is currently under development. Check back soon!
+                      Profile page is currently under development. Check back
+                      soon!
                     </p>
                   </div>
                 </div>
               )}
-              
+
               {/* Wishlist Tab */}
-              {activeTab === 'wishlist' && (
+              {activeTab === "wishlist" && (
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                     My Wishlist
                   </h2>
-                  
+
                   <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-md mb-6">
                     <p className="text-blue-700 dark:text-blue-400">
-                      Wishlist page is currently under development. Check back soon!
+                      Wishlist page is currently under development. Check back
+                      soon!
                     </p>
                   </div>
                 </div>
               )}
-              
+
               {/* Messages Tab */}
-              {activeTab === 'messages' && (
+              {activeTab === "messages" && (
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                     My Messages
                   </h2>
-                  
+
                   <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-md mb-6">
                     <p className="text-blue-700 dark:text-blue-400">
-                      Messages page is currently under development. Check back soon!
+                      Messages page is currently under development. Check back
+                      soon!
                     </p>
                   </div>
                 </div>
               )}
-              
+
               {/* Settings Tab */}
-              {activeTab === 'settings' && (
+              {activeTab === "settings" && (
                 <div>
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                     Account Settings
                   </h2>
-                  
+
                   <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-md mb-6">
                     <p className="text-blue-700 dark:text-blue-400">
-                      Settings page is currently under development. Check back soon!
+                      Settings page is currently under development. Check back
+                      soon!
                     </p>
                   </div>
                 </div>
@@ -414,7 +476,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      
+
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -423,7 +485,8 @@ export default function DashboardPage() {
               Confirm Deletion
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Are you sure you want to delete this property? This action cannot be undone.
+              Are you sure you want to delete this property? This action cannot
+              be undone.
             </p>
             <div className="flex justify-end space-x-3">
               <button

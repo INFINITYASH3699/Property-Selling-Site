@@ -1,9 +1,12 @@
-// context/ListingsContext.js
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// Set API URL with fallback for development
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
+// Log API URL at startup
+console.log("ListingsContext initialized with API_URL:", API_URL);
 
 export const ListingsContext = createContext();
 
@@ -30,7 +33,7 @@ export const ListingsProvider = ({ children }) => {
   const getConfig = () => {
     return {
       headers: {
-        Authorization: token ? `Bearer ${token}` : '',
+        Authorization: token ? `Bearer ${token}` : "",
       },
     };
   };
@@ -74,6 +77,9 @@ export const ListingsProvider = ({ children }) => {
 
       // Try to get listings from the API
       try {
+        console.log(
+          `Fetching listings from: ${API_URL}/properties${queryParams}`
+        );
         const res = await api.get(`/properties${queryParams}`, getConfig());
 
         if (res.data && res.data.success) {
@@ -85,12 +91,23 @@ export const ListingsProvider = ({ children }) => {
           });
           setFilters(filterParams);
           setLoading(false);
+          console.log("Listings fetched successfully:", res.data.data.length);
           return res.data;
         } else {
+          console.warn("Unexpected API response format:", res.data);
           throw new Error("Unexpected API response format");
         }
       } catch (apiError) {
         console.warn("API call failed, using fallback mock data:", apiError);
+        console.log(
+          "Error details:",
+          apiError.response?.data || apiError.message
+        );
+
+        // Log API connection information
+        console.log("API URL:", API_URL);
+        console.log("Query params:", queryParams);
+        console.log("Auth token:", token ? "Present" : "Not present");
 
         // Fallback to mock data for development
         const mockResponse = await getMockListings(filterParams);
@@ -98,11 +115,13 @@ export const ListingsProvider = ({ children }) => {
         setListings(mockResponse.data);
         setPagination({
           currentPage: page,
-          totalPages: mockResponse.totalPages || Math.ceil(mockResponse.count / 9),
+          totalPages:
+            mockResponse.totalPages || Math.ceil(mockResponse.count / 9),
           totalItems: mockResponse.count,
         });
         setFilters(filterParams);
         setLoading(false);
+        console.log("Using mock data instead:", mockResponse.data.length);
         return mockResponse;
       }
     } catch (err) {
@@ -115,7 +134,7 @@ export const ListingsProvider = ({ children }) => {
   // Mock data function for development/fallback
   const getMockListings = async (filterParams = {}) => {
     // Add a slight delay to simulate network request
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     // Our mock data
     const allMockListings = [
@@ -131,10 +150,12 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 3500,
         address: {
           city: "Mumbai",
-          state: "Maharashtra"
+          state: "Maharashtra",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop",
+          },
         ],
         featured: true,
         createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days ago
@@ -151,10 +172,12 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 2000,
         address: {
           city: "Bangalore",
-          state: "Karnataka"
+          state: "Karnataka",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop",
+          },
         ],
         createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
       },
@@ -170,18 +193,23 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 4000,
         address: {
           city: "Delhi",
-          state: "Delhi"
+          state: "Delhi",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop",
+          },
         ],
         featured: true,
-        createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days ago
+        createdAt: new Date(
+          Date.now() - 14 * 24 * 60 * 60 * 1000
+        ).toISOString(), // 14 days ago
       },
       {
         _id: "prop4",
         title: "Penthouse with Terrace Garden",
-        description: "Luxurious penthouse with private terrace garden and panoramic city views",
+        description:
+          "Luxurious penthouse with private terrace garden and panoramic city views",
         price: 55000000, // Price in INR
         propertyType: "Apartment",
         status: "For Sale",
@@ -190,17 +218,20 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 3800,
         address: {
           city: "Mumbai",
-          state: "Maharashtra"
+          state: "Maharashtra",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=2080&auto=format&fit=crop",
+          },
         ],
         createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
       },
       {
         _id: "prop5",
         title: "Riverside Villa in Goa",
-        description: "Stunning villa with private access to the river, perfect for vacation home",
+        description:
+          "Stunning villa with private access to the river, perfect for vacation home",
         price: 65000000, // Price in INR
         propertyType: "Villa",
         status: "For Sale",
@@ -209,13 +240,17 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 5000,
         address: {
           city: "Panjim",
-          state: "Goa"
+          state: "Goa",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2074&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2074&auto=format&fit=crop",
+          },
         ],
         featured: true,
-        createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(), // 21 days ago
+        createdAt: new Date(
+          Date.now() - 21 * 24 * 60 * 60 * 1000
+        ).toISOString(), // 21 days ago
       },
       {
         _id: "prop6",
@@ -229,10 +264,12 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 6000,
         address: {
           city: "Bangalore",
-          state: "Karnataka"
+          state: "Karnataka",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2069&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=2069&auto=format&fit=crop",
+          },
         ],
         createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
       },
@@ -248,10 +285,12 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 3200,
         address: {
           city: "Hyderabad",
-          state: "Telangana"
+          state: "Telangana",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
+          },
         ],
         createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), // 3 days ago
       },
@@ -267,18 +306,23 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 7000,
         address: {
           city: "Chennai",
-          state: "Tamil Nadu"
+          state: "Tamil Nadu",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
+          },
         ],
         featured: true,
-        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days ago
+        createdAt: new Date(
+          Date.now() - 10 * 24 * 60 * 60 * 1000
+        ).toISOString(), // 10 days ago
       },
       {
         _id: "prop9",
         title: "Heritage Haveli in Jaipur",
-        description: "Restored heritage property with traditional Rajasthani architecture",
+        description:
+          "Restored heritage property with traditional Rajasthani architecture",
         price: 70000000, // Price in INR
         propertyType: "House",
         status: "For Sale",
@@ -287,13 +331,17 @@ export const ListingsProvider = ({ children }) => {
         propertySize: 8000,
         address: {
           city: "Jaipur",
-          state: "Rajasthan"
+          state: "Rajasthan",
         },
         images: [
-          { url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop" }
+          {
+            url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop",
+          },
         ],
-        createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString(), // 45 days ago
-      }
+        createdAt: new Date(
+          Date.now() - 45 * 24 * 60 * 60 * 1000
+        ).toISOString(), // 45 days ago
+      },
     ];
 
     // Filter the mock data based on parameters
@@ -302,53 +350,54 @@ export const ListingsProvider = ({ children }) => {
     // Apply search filter
     if (filterParams.query) {
       const query = filterParams.query.toLowerCase();
-      filteredListings = filteredListings.filter(listing =>
-        listing.title.toLowerCase().includes(query) ||
-        listing.description.toLowerCase().includes(query) ||
-        listing.address.city.toLowerCase().includes(query) ||
-        listing.address.state.toLowerCase().includes(query) ||
-        listing.propertyType.toLowerCase().includes(query)
+      filteredListings = filteredListings.filter(
+        (listing) =>
+          listing.title.toLowerCase().includes(query) ||
+          listing.description.toLowerCase().includes(query) ||
+          listing.address.city.toLowerCase().includes(query) ||
+          listing.address.state.toLowerCase().includes(query) ||
+          listing.propertyType.toLowerCase().includes(query)
       );
     }
 
     // Apply property type filter
     if (filterParams.propertyType && filterParams.propertyType !== "any") {
-      filteredListings = filteredListings.filter(listing =>
-        listing.propertyType === filterParams.propertyType
+      filteredListings = filteredListings.filter(
+        (listing) => listing.propertyType === filterParams.propertyType
       );
     }
 
     // Apply price range filters
     if (filterParams.minPrice) {
-      filteredListings = filteredListings.filter(listing =>
-        listing.price >= Number(filterParams.minPrice)
+      filteredListings = filteredListings.filter(
+        (listing) => listing.price >= Number(filterParams.minPrice)
       );
     }
 
     if (filterParams.maxPrice) {
-      filteredListings = filteredListings.filter(listing =>
-        listing.price <= Number(filterParams.maxPrice)
+      filteredListings = filteredListings.filter(
+        (listing) => listing.price <= Number(filterParams.maxPrice)
       );
     }
 
     // Apply bedroom filter
     if (filterParams.bedrooms && filterParams.bedrooms !== "any") {
-      filteredListings = filteredListings.filter(listing =>
-        listing.bedrooms >= Number(filterParams.bedrooms)
+      filteredListings = filteredListings.filter(
+        (listing) => listing.bedrooms >= Number(filterParams.bedrooms)
       );
     }
 
     // Apply bathroom filter
     if (filterParams.bathrooms && filterParams.bathrooms !== "any") {
-      filteredListings = filteredListings.filter(listing =>
-        listing.bathrooms >= Number(filterParams.bathrooms)
+      filteredListings = filteredListings.filter(
+        (listing) => listing.bathrooms >= Number(filterParams.bathrooms)
       );
     }
 
     // Apply status filter
     if (filterParams.status) {
-      filteredListings = filteredListings.filter(listing =>
-        listing.status === filterParams.status
+      filteredListings = filteredListings.filter(
+        (listing) => listing.status === filterParams.status
       );
     }
 
@@ -364,7 +413,7 @@ export const ListingsProvider = ({ children }) => {
       success: true,
       data: paginatedListings,
       count: totalItems,
-      totalPages: totalPages
+      totalPages: totalPages,
     };
   };
 
@@ -390,7 +439,9 @@ export const ListingsProvider = ({ children }) => {
         // Fallback to mock data
         // Find the listing in our mock data
         const mockListings = await getMockListings();
-        const mockListing = mockListings.data.find(listing => listing._id === id);
+        const mockListing = mockListings.data.find(
+          (listing) => listing._id === id
+        );
 
         if (mockListing) {
           setLoading(false);
@@ -400,7 +451,8 @@ export const ListingsProvider = ({ children }) => {
           const detailedMockListing = {
             _id: id,
             title: "Luxury Villa with Swimming Pool",
-            description: "This stunning villa features a large swimming pool, spacious living areas, and beautiful gardens. Perfect for a family looking for comfort and luxury.",
+            description:
+              "This stunning villa features a large swimming pool, spacious living areas, and beautiful gardens. Perfect for a family looking for comfort and luxury.",
             price: 47500000, // Price in INR
             propertyType: "Villa",
             status: "For Sale",
@@ -414,25 +466,34 @@ export const ListingsProvider = ({ children }) => {
               city: "Mumbai",
               state: "Maharashtra",
               zipCode: "400001",
-              country: "India"
+              country: "India",
             },
-            amenities: ["Swimming Pool", "Garden", "Security System", "Home Theater", "Smart Home", "Air Conditioning"],
+            amenities: [
+              "Swimming Pool",
+              "Garden",
+              "Security System",
+              "Home Theater",
+              "Smart Home",
+              "Air Conditioning",
+            ],
             featured: true,
-            createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago
+            createdAt: new Date(
+              Date.now() - 30 * 24 * 60 * 60 * 1000
+            ).toISOString(), // 30 days ago
             images: [
               {
                 _id: "img1",
-                url: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop"
+                url: "https://images.unsplash.com/photo-1613977257363-707ba9348227?q=80&w=2070&auto=format&fit=crop",
               },
               {
                 _id: "img2",
-                url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop"
+                url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=2070&auto=format&fit=crop",
               },
               {
                 _id: "img3",
-                url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop"
-              }
-            ]
+                url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
+              },
+            ],
           };
 
           setLoading(false);
@@ -448,14 +509,51 @@ export const ListingsProvider = ({ children }) => {
 
   // Get my listings (for authenticated users)
   const getMyListings = async () => {
+    // Don't set loading if already fetched
+    const cacheKey = "user_properties";
+    const cachedData = sessionStorage.getItem(cacheKey);
+
+    // Try to get from cache first
+    if (cachedData) {
+      try {
+        const parsedData = JSON.parse(cachedData);
+        // Use cached data if it's less than 5 minutes old
+        const cacheTime = parsedData.timestamp;
+        const now = Date.now();
+        if (now - cacheTime < 5 * 60 * 1000) {
+          // 5 minutes
+          console.log("Using cached properties data");
+          return parsedData.listings;
+        }
+      } catch (e) {
+        console.warn("Error parsing cached data:", e);
+        // Continue with API fetch if cache parse fails
+      }
+    }
+
     setLoading(true);
     try {
       // Try to get the user's listings from the API
       try {
-        const res = await api.get('/properties/my-properties', getConfig());
+        console.log("Fetching user properties from API");
+        const res = await api.get("/properties/my-properties", getConfig());
 
         if (res.data && res.data.success) {
           setLoading(false);
+
+          // Cache the response
+          try {
+            sessionStorage.setItem(
+              cacheKey,
+              JSON.stringify({
+                listings: res.data.data,
+                timestamp: Date.now(),
+              })
+            );
+          } catch (e) {
+            console.warn("Failed to cache properties:", e);
+          }
+
           return res.data.data;
         } else {
           throw new Error("Unexpected API response format");
@@ -477,12 +575,16 @@ export const ListingsProvider = ({ children }) => {
             propertySize: 1200,
             address: {
               city: "Hyderabad",
-              state: "Telangana"
+              state: "Telangana",
             },
             images: [
-              { url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop" }
+              {
+                url: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?q=80&w=2070&auto=format&fit=crop",
+              },
             ],
-            createdAt: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(), // 60 days ago
+            createdAt: new Date(
+              Date.now() - 60 * 24 * 60 * 60 * 1000
+            ).toISOString(), // 60 days ago
           },
           {
             _id: "myProp2",
@@ -496,16 +598,34 @@ export const ListingsProvider = ({ children }) => {
             propertySize: 1800,
             address: {
               city: "Pune",
-              state: "Maharashtra"
+              state: "Maharashtra",
             },
             images: [
-              { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" }
+              {
+                url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
+              },
             ],
-            createdAt: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(), // 90 days ago
-          }
+            createdAt: new Date(
+              Date.now() - 90 * 24 * 60 * 60 * 1000
+            ).toISOString(), // 90 days ago
+          },
         ];
 
         setLoading(false);
+
+        // Cache the mock data too
+        try {
+          sessionStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              listings: myListings,
+              timestamp: Date.now(),
+            })
+          );
+        } catch (e) {
+          console.warn("Failed to cache mock data:", e);
+        }
+
         return myListings;
       }
     } catch (err) {
@@ -523,8 +643,8 @@ export const ListingsProvider = ({ children }) => {
         const formData = new FormData();
 
         // Add listing data
-        Object.keys(listingData).forEach(key => {
-          if (key === 'amenities' && Array.isArray(listingData[key])) {
+        Object.keys(listingData).forEach((key) => {
+          if (key === "amenities" && Array.isArray(listingData[key])) {
             formData.append(key, JSON.stringify(listingData[key]));
           } else {
             formData.append(key, listingData[key]);
@@ -533,16 +653,16 @@ export const ListingsProvider = ({ children }) => {
 
         // Add images
         if (images && images.length > 0) {
-          images.forEach(image => {
-            formData.append('images', image);
+          images.forEach((image) => {
+            formData.append("images", image);
           });
         }
 
-        const res = await api.post('/properties', formData, {
+        const res = await api.post("/properties", formData, {
           ...getConfig(),
           headers: {
             ...getConfig().headers,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         });
 
@@ -552,10 +672,13 @@ export const ListingsProvider = ({ children }) => {
           throw new Error("Unexpected API response format");
         }
       } catch (apiError) {
-        console.warn("API call failed, using fallback mock response:", apiError);
+        console.warn(
+          "API call failed, using fallback mock response:",
+          apiError
+        );
 
         // Simulate API call for development
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 800));
 
         // Return mock response with generated ID
         return {
@@ -563,9 +686,9 @@ export const ListingsProvider = ({ children }) => {
           _id: "new-" + Math.random().toString(36).substr(2, 9),
           images: images.map((_, index) => ({
             _id: `img-${index}`,
-            url: URL.createObjectURL(images[index])
+            url: URL.createObjectURL(images[index]),
           })),
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
         };
       }
     } catch (err) {
@@ -578,7 +701,11 @@ export const ListingsProvider = ({ children }) => {
     try {
       // Try to update the listing via API
       try {
-        const res = await api.put(`/properties/${id}`, listingData, getConfig());
+        const res = await api.put(
+          `/properties/${id}`,
+          listingData,
+          getConfig()
+        );
 
         if (res.data && res.data.success) {
           return res.data.data;
@@ -586,16 +713,19 @@ export const ListingsProvider = ({ children }) => {
           throw new Error("Unexpected API response format");
         }
       } catch (apiError) {
-        console.warn("API call failed, using fallback mock response:", apiError);
+        console.warn(
+          "API call failed, using fallback mock response:",
+          apiError
+        );
 
         // Simulate API call for development
-        await new Promise(resolve => setTimeout(resolve, 600));
+        await new Promise((resolve) => setTimeout(resolve, 600));
 
         // Return updated listing
         return {
           ...listingData,
           _id: id,
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
       }
     } catch (err) {
@@ -616,10 +746,13 @@ export const ListingsProvider = ({ children }) => {
           throw new Error("Unexpected API response format");
         }
       } catch (apiError) {
-        console.warn("API call failed, using fallback mock response:", apiError);
+        console.warn(
+          "API call failed, using fallback mock response:",
+          apiError
+        );
 
         // Simulate API call for development
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
         return true;
       }
     } catch (err) {
@@ -636,8 +769,8 @@ export const ListingsProvider = ({ children }) => {
 
         // Add images
         if (images && images.length > 0) {
-          images.forEach(image => {
-            formData.append('images', image);
+          images.forEach((image) => {
+            formData.append("images", image);
           });
         }
 
@@ -645,7 +778,7 @@ export const ListingsProvider = ({ children }) => {
           ...getConfig(),
           headers: {
             ...getConfig().headers,
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         });
 
@@ -655,18 +788,21 @@ export const ListingsProvider = ({ children }) => {
           throw new Error("Unexpected API response format");
         }
       } catch (apiError) {
-        console.warn("API call failed, using fallback mock response:", apiError);
+        console.warn(
+          "API call failed, using fallback mock response:",
+          apiError
+        );
 
         // Simulate API call for development
-        await new Promise(resolve => setTimeout(resolve, 700));
+        await new Promise((resolve) => setTimeout(resolve, 700));
 
         // Return mock result
         return {
           success: true,
           images: images.map((_, index) => ({
             _id: `new-img-${index}`,
-            url: URL.createObjectURL(images[index])
-          }))
+            url: URL.createObjectURL(images[index]),
+          })),
         };
       }
     } catch (err) {
@@ -679,7 +815,10 @@ export const ListingsProvider = ({ children }) => {
     try {
       // Try to delete image via API
       try {
-        const res = await api.delete(`/properties/${propertyId}/images/${imageId}`, getConfig());
+        const res = await api.delete(
+          `/properties/${propertyId}/images/${imageId}`,
+          getConfig()
+        );
 
         if (res.data && res.data.success) {
           return { success: true };
@@ -687,10 +826,13 @@ export const ListingsProvider = ({ children }) => {
           throw new Error("Unexpected API response format");
         }
       } catch (apiError) {
-        console.warn("API call failed, using fallback mock response:", apiError);
+        console.warn(
+          "API call failed, using fallback mock response:",
+          apiError
+        );
 
         // Simulate API call for development
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise((resolve) => setTimeout(resolve, 300));
         return { success: true };
       }
     } catch (err) {
@@ -698,9 +840,15 @@ export const ListingsProvider = ({ children }) => {
     }
   };
 
-  // Initialize - load listings on first render
+  // Initialize - load listings on first render only
+  const initialLoadRef = useRef(false);
+
   useEffect(() => {
-    getListings();
+    // Only fetch listings if not already loaded
+    if (!initialLoadRef.current) {
+      initialLoadRef.current = true;
+      getListings();
+    }
   }, []);
 
   return (

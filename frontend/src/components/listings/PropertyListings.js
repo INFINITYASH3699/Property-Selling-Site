@@ -4,9 +4,14 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { MotionDiv } from "../MotionWrapper";
 import PropertyCard from "../../app/listings/PropertyCard";
 import LoadingSpinner from "../common/LoadingSpinner";
+import PropertyCardSkeleton from "../../app/listings/PropertyCardSkeleton";
 import { ChevronDown, ChevronUp, Filter, Search, X } from "lucide-react";
 import { ListingsContext } from "../../context/ListingsContext";
 
+/**
+ * PropertyListings component
+ * Handles fetching, filtering, searching, sorting, and displaying property listings.
+ */
 export default function PropertyListings() {
   const { listings, loading, error, pagination, getListings } =
     useContext(ListingsContext);
@@ -50,10 +55,8 @@ export default function PropertyListings() {
       }
     }
 
-    // Add event listener
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      // Remove event listener on cleanup
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [filterDropdownRef, filterButtonRef]);
@@ -74,14 +77,13 @@ export default function PropertyListings() {
       );
       setSuggestions(filteredSuggestions);
       setIsTyping(false);
-    }, 300); // 300ms delay
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
   // Apply all filters and search
   const applyFilters = () => {
-    // Collect all filter parameters
     const filtersToApply = {
       ...localFilters,
       query: searchQuery || localFilters.query,
@@ -94,7 +96,6 @@ export default function PropertyListings() {
       }
     });
 
-    // Call API with filters
     getListings(1, filtersToApply);
   };
 
@@ -135,14 +136,12 @@ export default function PropertyListings() {
     });
     setShowFilterDropdown(false);
 
-    // Apply the new filters
     const filtersToApply = {
       ...localFilters,
       ...newFilters,
       query: searchQuery,
     };
 
-    // Clean up empty filters
     Object.keys(filtersToApply).forEach((key) => {
       if (filtersToApply[key] === "" || filtersToApply[key] === "any") {
         delete filtersToApply[key];
@@ -173,24 +172,49 @@ export default function PropertyListings() {
   // Handle sort change
   const handleSortChange = (sortValue) => {
     setSortBy(sortValue);
-    // Currently sorting is done client-side, but you could also sort server-side by adding a sort parameter to getListings
+    // Sorting is done client-side. For server-side, add sort param to getListings.
   };
 
   // Loading state
-  if (loading) return <LoadingSpinner />;
+  if (loading) {
+    return (
+      <div className="p-8">
+        <PropertyCardSkeleton viewType={view} count={9} />
+      </div>
+    );
+  }
 
-  // Error state
+  // Error state with more helpful information
   if (error) {
     return (
-      <div className="p-8 text-center">
-        <h2 className="text-xl font-bold text-red-600 mb-4">Error</h2>
-        <p className="mb-4">{error}</p>
-        <button
-          onClick={() => getListings(1, {})}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
-          Try Again
-        </button>
+      <div className="p-8 bg-white rounded-lg shadow-md">
+        <div className="text-center max-w-xl mx-auto">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-16 w-16 mx-auto text-red-500 mb-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+          <h2 className="text-2xl font-bold text-red-600 mb-4">Error Loading Properties</h2>
+          <p className="mb-6 text-gray-700">{error}</p>
+          <p className="mb-6 text-sm text-gray-500">
+            This could be due to connection issues with the server. Please check your internet connection or try again later.
+          </p>
+          <button
+            onClick={() => getListings(1, {})}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-md"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
@@ -360,7 +384,7 @@ export default function PropertyListings() {
               </div>
             )}
 
-            {/* Loading Spinner */}
+            {/* Loading Spinner for suggestions */}
             {isTyping && (
               <div className="absolute top-12 w-full bg-white border border-gray-200 rounded-lg shadow-xl z-50 ring-1 ring-black/5">
                 <div className="px-4 py-2 text-gray-700 flex items-center justify-center">
@@ -516,7 +540,6 @@ function FilterDropdown({ initialFilters, onFilter }) {
     propertyType: initialFilters?.propertyType || "any",
   });
 
-  // Update local state when initialFilters change
   useEffect(() => {
     setFilterState({
       minPrice: initialFilters?.minPrice || "",

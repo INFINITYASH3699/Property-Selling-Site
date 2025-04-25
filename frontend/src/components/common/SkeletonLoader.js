@@ -1,158 +1,208 @@
-// src/components/common/SkeletonLoader.js
-import React from 'react';
+// components/common/SkeletonLoader.js
+"use client";
 
-export function PropertyCardSkeleton({ viewType = 'grid' }) {
-  if (viewType === 'grid') {
+import { MotionDiv } from "../MotionWrapper";
+
+// Property Card Skeleton
+export function PropertyCardSkeleton({ viewType = "grid", count = 6 }) {
+  // Generate multiple skeletons
+  const skeletons = Array.from({ length: count }).map((_, i) => (
+    <SkeletonItem key={i} viewType={viewType} delay={i * 0.05} />
+  ));
+
+  return (
+    <div
+      className={
+        viewType === "grid"
+          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          : "flex flex-col space-y-6"
+      }
+    >
+      {skeletons}
+    </div>
+  );
+}
+
+// Individual Skeleton
+function SkeletonItem({ viewType, delay = 0 }) {
+  if (viewType === "grid") {
     return (
-      <div className="bg-white rounded-xl shadow-md overflow-hidden h-full animate-pulse">
-        {/* Image placeholder */}
-        <div className="bg-gray-200 h-48 w-full"></div>
+      <MotionDiv
+        className="bg-white rounded-xl overflow-hidden h-full shadow-property border border-gray-100"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay, duration: 0.3 }}
+      >
+        <div className="flex flex-col h-full">
+          {/* Image Skeleton */}
+          <div className="relative h-56 w-full bg-gray-200 animate-pulse"></div>
 
-        {/* Content */}
-        <div className="p-4">
-          {/* Price */}
-          <div className="h-7 bg-gray-200 rounded w-1/3 mb-2"></div>
+          {/* Content */}
+          <div className="p-4 flex-grow flex flex-col">
+            {/* Date */}
+            <div className="h-3 w-20 bg-gray-200 rounded animate-pulse mb-3"></div>
 
-          {/* Title */}
-          <div className="h-5 bg-gray-200 rounded w-5/6 mb-3"></div>
+            {/* Price */}
+            <div className="h-6 w-32 bg-gray-300 rounded animate-pulse mb-3"></div>
 
-          {/* Location */}
-          <div className="flex items-center mb-3">
-            <div className="h-4 w-4 bg-gray-200 rounded-full mr-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+            {/* Title */}
+            <div className="h-5 w-48 bg-gray-200 rounded animate-pulse mb-4"></div>
+
+            {/* Features */}
+            <div className="mt-auto border-t border-gray-200 pt-3 flex justify-between">
+              <div className="h-4 w-8 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-8 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+            </div>
           </div>
 
-          {/* Features */}
-          <div className="border-t border-gray-100 pt-3 flex justify-between">
-            <div className="flex items-center">
-              <div className="h-4 w-4 bg-gray-200 rounded-full mr-1"></div>
-              <div className="h-4 bg-gray-200 rounded w-12 mr-3"></div>
-
-              <div className="h-4 w-4 bg-gray-200 rounded-full mr-1"></div>
-              <div className="h-4 bg-gray-200 rounded w-12"></div>
-            </div>
-
-            <div className="flex items-center">
-              <div className="h-4 w-4 bg-gray-200 rounded-full mr-1"></div>
-              <div className="h-4 bg-gray-200 rounded w-12"></div>
-            </div>
+          {/* Button */}
+          <div className="p-4 pt-0">
+            <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
           </div>
         </div>
-      </div>
+      </MotionDiv>
     );
   }
 
   // List view skeleton
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
+    <MotionDiv
+      className="bg-white rounded-xl overflow-hidden shadow-property border border-gray-100"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.3 }}
+    >
       <div className="flex flex-col md:flex-row">
-        {/* Image section */}
-        <div className="bg-gray-200 h-60 md:h-auto md:w-1/3"></div>
+        {/* Image skeleton */}
+        <div className="relative h-64 md:h-auto md:w-2/5 lg:w-1/3 bg-gray-200 animate-pulse"></div>
 
-        {/* Content section */}
-        <div className="p-5 md:p-6 flex-1">
-          {/* Price */}
-          <div className="h-7 bg-gray-200 rounded w-1/4 mb-2"></div>
+        {/* Content skeleton */}
+        <div className="p-5 md:p-6 flex-1 flex flex-col justify-between">
+          <div>
+            {/* Date */}
+            <div className="h-3 w-20 bg-gray-200 rounded animate-pulse mb-3"></div>
 
-          {/* Title */}
-          <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
+            {/* Price */}
+            <div className="h-6 w-32 bg-gray-300 rounded animate-pulse mb-3"></div>
 
-          {/* Location */}
-          <div className="flex items-center mb-3">
-            <div className="h-4 w-4 bg-gray-200 rounded-full mr-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+            {/* Title */}
+            <div className="h-5 w-48 bg-gray-200 rounded animate-pulse mb-3"></div>
+
+            {/* Location */}
+            <div className="h-4 w-40 bg-gray-200 rounded animate-pulse mb-4"></div>
+
+            {/* Description */}
+            <div className="space-y-2 mb-4">
+              <div className="h-3 w-full bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-3 w-5/6 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Features and Button */}
+          <div className="flex flex-wrap justify-between items-center border-t border-gray-200 pt-4">
+            <div className="flex gap-4">
+              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+            <div className="mt-4 md:mt-0">
+              <div className="h-10 w-32 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </MotionDiv>
+  );
+}
+
+// Detail Page Skeleton
+export function PropertyDetailSkeleton() {
+  return (
+    <div className="container mx-auto px-4 py-8">
+      {/* Breadcrumb */}
+      <div className="h-4 w-48 bg-gray-200 rounded animate-pulse mb-6"></div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Content - 2/3 width on desktop */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Image Gallery */}
+          <div className="h-96 bg-gray-200 rounded-lg animate-pulse"></div>
+
+          {/* Title and Price */}
+          <div className="space-y-4">
+            <div className="h-8 w-3/4 bg-gray-300 rounded animate-pulse"></div>
+            <div className="h-6 w-48 bg-gray-300 rounded animate-pulse"></div>
+            <div className="h-4 w-64 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+
+          {/* Features */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="flex flex-col items-center p-4 border rounded-lg">
+                <div className="h-10 w-10 bg-gray-200 rounded-full animate-pulse mb-2"></div>
+                <div className="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            ))}
           </div>
 
           {/* Description */}
-          <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
-
-          {/* Features */}
-          <div className="border-t border-gray-100 pt-4 flex justify-between">
-            <div className="flex space-x-4">
-              <div className="h-5 bg-gray-200 rounded w-20"></div>
-              <div className="h-5 bg-gray-200 rounded w-20"></div>
-              <div className="h-5 bg-gray-200 rounded w-20"></div>
+          <div className="space-y-3 mt-6">
+            <div className="h-5 w-40 bg-gray-300 rounded animate-pulse"></div>
+            <div className="space-y-2">
+              <div className="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-4/5 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 w-3/4 bg-gray-200 rounded animate-pulse"></div>
             </div>
-
-            <div className="h-5 bg-gray-200 rounded w-24"></div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function PropertyListingSkeleton({ count = 6, viewType = 'grid' }) {
-  return (
-    <div className={
-      viewType === 'grid'
-        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        : "flex flex-col space-y-6"
-    }>
-      {Array(count).fill(0).map((_, index) => (
-        <PropertyCardSkeleton key={index} viewType={viewType} />
-      ))}
-    </div>
-  );
-}
-
-export function PropertyDetailSkeleton() {
-  return (
-    <div className="animate-pulse">
-      {/* Image gallery skeleton */}
-      <div className="bg-gray-200 h-72 md:h-96 w-full rounded-lg mb-8"></div>
-
-      {/* Title and price */}
-      <div className="mb-6">
-        <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-        <div className="h-7 bg-gray-200 rounded w-1/3"></div>
-      </div>
-
-      {/* Details section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        {/* Left column - Features */}
-        <div className="md:col-span-2">
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            {Array(4).fill(0).map((_, index) => (
-              <div key={index} className="bg-gray-100 p-4 rounded-lg">
-                <div className="h-5 bg-gray-200 rounded mb-2 w-1/2 mx-auto"></div>
-                <div className="h-6 bg-gray-200 rounded w-2/3 mx-auto"></div>
-              </div>
-            ))}
-          </div>
-
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-4 mt-6"></div>
-          <div className="h-4 bg-gray-200 rounded w-full mb-3"></div>
-          <div className="h-4 bg-gray-200 rounded w-full mb-3"></div>
-          <div className="h-4 bg-gray-200 rounded w-3/4 mb-6"></div>
 
           {/* Amenities */}
-          <div className="h-6 bg-gray-200 rounded w-1/4 mb-4"></div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-6">
-            {Array(6).fill(0).map((_, index) => (
-              <div key={index} className="flex items-center">
-                <div className="h-4 w-4 bg-gray-200 rounded-full mr-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              </div>
-            ))}
+          <div className="space-y-3 mt-6">
+            <div className="h-5 w-40 bg-gray-300 rounded animate-pulse"></div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="h-6 w-full bg-gray-200 rounded animate-pulse"></div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Right column - Contact box */}
-        <div>
-          <div className="bg-gray-100 p-5 rounded-lg">
-            <div className="h-6 bg-gray-200 rounded w-1/2 mb-4 mx-auto"></div>
-            <div className="h-16 bg-gray-200 rounded-full w-16 mb-3 mx-auto"></div>
-            <div className="h-5 bg-gray-200 rounded w-2/3 mb-2 mx-auto"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-4 mx-auto"></div>
-            <div className="h-10 bg-gray-200 rounded mb-3"></div>
-            <div className="h-10 bg-gray-200 rounded"></div>
+        {/* Sidebar - 1/3 width on desktop */}
+        <div className="space-y-6">
+          {/* Agent Card */}
+          <div className="bg-white p-6 rounded-lg border shadow-sm">
+            <div className="flex items-center mb-4">
+              <div className="h-16 w-16 bg-gray-200 rounded-full animate-pulse mr-4"></div>
+              <div className="space-y-2">
+                <div className="h-5 w-32 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="h-10 w-full bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-10 w-full bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Map */}
+          <div className="h-64 bg-gray-200 rounded-lg animate-pulse"></div>
+
+          {/* Similar Properties */}
+          <div className="space-y-4">
+            <div className="h-5 w-40 bg-gray-300 rounded animate-pulse"></div>
+            {Array.from({ length: 2 }).map((_, i) => (
+              <div key={i} className="bg-white p-4 rounded-lg border shadow-sm">
+                <div className="h-32 w-full bg-gray-200 rounded animate-pulse mb-3"></div>
+                <div className="h-5 w-3/4 bg-gray-200 rounded animate-pulse mb-2"></div>
+                <div className="h-4 w-1/2 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default PropertyCardSkeleton;

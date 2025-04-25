@@ -49,12 +49,33 @@ app.use(helmet({
 
 app.use(xss()); // Sanitize inputs
 
-// IMPORTANT: Define the specific allowed origin
-const allowedOrigin = process.env.CLIENT_URL;
+// Allow specific origins or handle development/production differently
+let allowedOrigins = [];
+if (process.env.NODE_ENV === 'development') {
+  // In development, allow multiple origins
+  allowedOrigins = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://0.0.0.0:3000'
+  ];
+} else {
+  // In production, use environment variable or fallback
+  allowedOrigins = [process.env.CLIENT_URL || 'https://yourdomain.com'];
+}
 
-// Configure CORS for all regular requests - no wildcard when using credentials
+// Configure CORS with dynamic origin checking
 const corsOptions = {
-  origin: allowedOrigin, // Must be specific when using credentials
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.warn(`CORS blocked request from origin: ${origin}`);
+      callback(null, false);
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
@@ -66,8 +87,17 @@ app.use(cors(corsOptions));
 
 // Handle preflight requests specifically for all routes
 app.options('*', (req, res) => {
-  // Set the required CORS headers manually for preflight
-  res.header('Access-Control-Allow-Origin', allowedOrigin);
+  // Get origin from request
+  const origin = req.headers.origin;
+
+  // Check if origin is allowed
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  } else if (!origin) {
+    // For requests with no origin, we'll allow it with a wildcard
+    res.header('Access-Control-Allow-Origin', '*');
+  }
+
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Origin, Accept');
   res.header('Access-Control-Allow-Credentials', 'true');
@@ -113,7 +143,7 @@ app.get('/', (req, res) => {
 
 // Add a specific route to check CORS
 app.get('/api/cors-test', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'CORS is working correctly',
     requestOrigin: req.headers.origin || 'No origin header',
     corsHeaders: {

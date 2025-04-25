@@ -3,7 +3,11 @@ import { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+// Set API URL with fallback for development
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+
+// Log API URL at startup
+console.log('WishlistContext initialized with API_URL:', API_URL);
 
 export const WishlistContext = createContext();
 
@@ -11,7 +15,7 @@ export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const { user, token, isAuthenticated } = useContext(AuthContext);
 
   const api = axios.create({
@@ -31,7 +35,7 @@ export const WishlistProvider = ({ children }) => {
   // Get wishlist
   const getWishlist = async () => {
     if (!isAuthenticated) return;
-    
+
     setLoading(true);
     try {
       const res = await api.get('/wishlist', getConfig());
@@ -47,7 +51,7 @@ export const WishlistProvider = ({ children }) => {
   // Add to wishlist
   const addToWishlist = async (propertyId) => {
     if (!isAuthenticated) return;
-    
+
     setLoading(true);
     try {
       const res = await api.post(`/wishlist/${propertyId}`, {}, getConfig());
@@ -64,7 +68,7 @@ export const WishlistProvider = ({ children }) => {
   // Remove from wishlist
   const removeFromWishlist = async (propertyId) => {
     if (!isAuthenticated) return;
-    
+
     setLoading(true);
     try {
       const res = await api.delete(`/wishlist/${propertyId}`, getConfig());
@@ -81,7 +85,7 @@ export const WishlistProvider = ({ children }) => {
   // Clear wishlist
   const clearWishlist = async () => {
     if (!isAuthenticated) return;
-    
+
     setLoading(true);
     try {
       await api.delete('/wishlist', getConfig());
@@ -110,18 +114,16 @@ export const WishlistProvider = ({ children }) => {
   }, [isAuthenticated, user]);
 
   return (
-    <WishlistContext.Provider
-      value={{
-        wishlist,
-        loading,
-        error,
-        getWishlist,
-        addToWishlist,
-        removeFromWishlist,
-        clearWishlist,
-        isInWishlist,
-      }}
-    >
+    <WishlistContext.Provider value={{
+      wishlist,
+      loading,
+      error,
+      getWishlist,
+      addToWishlist,
+      removeFromWishlist,
+      clearWishlist,
+      isInWishlist,
+    }}>
       {children}
     </WishlistContext.Provider>
   );

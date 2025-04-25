@@ -171,8 +171,8 @@ export default function DashboardPage() {
 
               {/* Navigation */}
               <nav className="space-y-1">
-                <button
-                  onClick={() => setActiveTab("profile")}
+                <Link
+                  href="/dashboard/profile"
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                     activeTab === "profile"
                       ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
@@ -181,7 +181,7 @@ export default function DashboardPage() {
                 >
                   <User size={18} className="mr-3" />
                   My Profile
-                </button>
+                </Link>
 
                 {(isAgent || isAdmin) && (
                   <button
@@ -197,8 +197,8 @@ export default function DashboardPage() {
                   </button>
                 )}
 
-                <button
-                  onClick={() => setActiveTab("wishlist")}
+                <Link
+                  href="/dashboard/wishlist"
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                     activeTab === "wishlist"
                       ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
@@ -207,10 +207,10 @@ export default function DashboardPage() {
                 >
                   <Heart size={18} className="mr-3" />
                   Wishlist
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => setActiveTab("messages")}
+                <Link
+                  href="/dashboard/messages"
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                     activeTab === "messages"
                       ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
@@ -219,10 +219,10 @@ export default function DashboardPage() {
                 >
                   <MessageSquare size={18} className="mr-3" />
                   Messages
-                </button>
+                </Link>
 
-                <button
-                  onClick={() => setActiveTab("settings")}
+                <Link
+                  href="/dashboard/settings"
                   className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                     activeTab === "settings"
                       ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
@@ -231,7 +231,7 @@ export default function DashboardPage() {
                 >
                   <Settings size={18} className="mr-3" />
                   Settings
-                </button>
+                </Link>
               </nav>
             </div>
           </div>

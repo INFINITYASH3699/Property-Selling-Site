@@ -22,6 +22,8 @@ const properties = require('./routes/properties');
 const auth = require('./routes/auth');
 const users = require('./routes/users');
 const wishlist = require('./routes/wishlist');
+const locations = require('./routes/locations');
+const messages = require('./routes/messages');
 
 const app = express();
 
@@ -133,6 +135,8 @@ app.use('/api/properties', properties);
 app.use('/api/auth', auth);
 app.use('/api/users', users);
 app.use('/api/wishlist', wishlist);
+app.use('/api/locations', locations);
+app.use('/api/messages', messages);
 
 // Basic route for testing
 app.get('/', (req, res) => {

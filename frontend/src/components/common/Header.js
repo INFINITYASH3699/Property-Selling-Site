@@ -260,7 +260,7 @@ export default function Header() {
                       </Link>
 
                       <Link
-                        href="/dashboard?tab=profile"
+                        href="/dashboard/profile"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setShowUserDropdown(false)}
                       >

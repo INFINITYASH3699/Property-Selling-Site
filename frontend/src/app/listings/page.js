@@ -50,7 +50,6 @@ function ListingsContent() {
 
       // Only fetch if actual URL params have changed
       if (Object.keys(initialFilters).length > 0 || page > 1) {
-        console.log('Fetching with URL params', initialFilters);
         getListings(page, initialFilters);
       }
     } else {

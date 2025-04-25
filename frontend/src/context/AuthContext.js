@@ -6,8 +6,6 @@ import { useRouter } from 'next/navigation';
 // Set API URL with fallback for development
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
-// Log API URL at startup
-console.log('AuthContext initialized with API_URL:', API_URL);
 
 export const AuthContext = createContext();
 

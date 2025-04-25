@@ -5,8 +5,6 @@ import { AuthContext } from "./AuthContext";
 // Set API URL with fallback for development
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-// Log API URL at startup
-console.log("ListingsContext initialized with API_URL:", API_URL);
 
 export const ListingsContext = createContext();
 
@@ -77,9 +75,6 @@ export const ListingsProvider = ({ children }) => {
 
       // Try to get listings from the API
       try {
-        console.log(
-          `Fetching listings from: ${API_URL}/properties${queryParams}`
-        );
         const res = await api.get(`/properties${queryParams}`, getConfig());
 
         if (res.data && res.data.success) {
@@ -91,7 +86,6 @@ export const ListingsProvider = ({ children }) => {
           });
           setFilters(filterParams);
           setLoading(false);
-          console.log("Listings fetched successfully:", res.data.data.length);
           return res.data;
         } else {
           console.warn("Unexpected API response format:", res.data);
@@ -99,15 +93,6 @@ export const ListingsProvider = ({ children }) => {
         }
       } catch (apiError) {
         console.warn("API call failed, using fallback mock data:", apiError);
-        console.log(
-          "Error details:",
-          apiError.response?.data || apiError.message
-        );
-
-        // Log API connection information
-        console.log("API URL:", API_URL);
-        console.log("Query params:", queryParams);
-        console.log("Auth token:", token ? "Present" : "Not present");
 
         // Fallback to mock data for development
         const mockResponse = await getMockListings(filterParams);
@@ -121,7 +106,6 @@ export const ListingsProvider = ({ children }) => {
         });
         setFilters(filterParams);
         setLoading(false);
-        console.log("Using mock data instead:", mockResponse.data.length);
         return mockResponse;
       }
     } catch (err) {
@@ -521,8 +505,6 @@ export const ListingsProvider = ({ children }) => {
         const cacheTime = parsedData.timestamp;
         const now = Date.now();
         if (now - cacheTime < 5 * 60 * 1000) {
-          // 5 minutes
-          console.log("Using cached properties data");
           return parsedData.listings;
         }
       } catch (e) {
@@ -535,7 +517,6 @@ export const ListingsProvider = ({ children }) => {
     try {
       // Try to get the user's listings from the API
       try {
-        console.log("Fetching user properties from API");
         const res = await api.get("/properties/my-properties", getConfig());
 
         if (res.data && res.data.success) {

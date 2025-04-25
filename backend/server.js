@@ -51,17 +51,15 @@ app.use(xss()); // Sanitize inputs
 
 // Allow specific origins or handle development/production differently
 let allowedOrigins = [];
-if (process.env.NODE_ENV === 'development') {
-  // In development, allow multiple origins
-  allowedOrigins = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://0.0.0.0:3000'
-  ];
+
+if (process.env.CLIENT_URL) {
+  // Use CLIENT_URL from .env for both development and production
+  allowedOrigins = [process.env.CLIENT_URL];
 } else {
-  // In production, use environment variable or fallback
-  allowedOrigins = [process.env.CLIENT_URL || 'https://yourdomain.com'];
+  // If CLIENT_URL is not set in .env, fall back to a default URL
+  allowedOrigins = ['https://varad-properties.vercel.app'];
 }
+
 
 // Configure CORS with dynamic origin checking
 const corsOptions = {
